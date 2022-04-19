@@ -6,8 +6,9 @@ JAVA=$JAVABASE/bin/java
 NATIVEIMAGE=$JAVABASE/bin/native-image
 CLASSPATH=commons-cli-1.5.0.jar:entities:handlers:.
 
-find entities handlers -name "*.java" -exec $JAVAC "{}" \;
-$JAVAC -Xlint:deprecation -cp $CLASSPATH *.java
+find entities handlers -name "*.java" -exec $JAVAC -Xlint:deprecation --source-path . -cp $CLASSPATH "{}" \;
+echo "All Classes in Subdirs compiled."
+$JAVAC -Xlint:deprecation --source-path . -cp $CLASSPATH *.java
 if [ $? != 0 ] ; then
 	echo "Compilation failed!"
 	exit
