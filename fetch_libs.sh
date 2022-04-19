@@ -9,5 +9,6 @@ rm -v commons-cli-1.5.0*.jar
 
 wget -O - "${LOCATION}" | tar --wildcards -xzv "commons-cli-1.5.0/commons-cli-1.5.0.jar"
 
-mv -iv commons-cli-1.5.0/*.jar .
+mkdir lib
+mv -iv commons-cli-1.5.0/*.jar lib
 rmdir commons-cli-1.5.0

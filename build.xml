@@ -1,3 +1,55 @@
 <project name="jsystemtools" basedir="." default="compile">
+
+	<property name="src.dir"				value="src" />
+	<property name="build.dir"				value="build" />
+	<property name="classes.dir"			value="${build.dir}/classes" />
+	<property name="jar.dir"				value="${build.dir}/jar" />
+	<property name="main-class"				value="MainProgram" />
+	<property name="lib.dir"				value="lib" />
+	<property name="tmp.dir"				value="/dev/shm/ant_java_jsystemtools" />
+	<property name="java.basedir"			value="/usr/lib/jvm/graalvm-ce-java17" />
+	<property name="javac.path"				value="${java.basedir}/bin/javac" />
+	<property name="native_image.path"		value="${java.basedir}/bin/native-image" />
+	<property name="commons_cli.location"	value="https://dlcdn.apache.org//commons/cli/binaries/commons-cli-1.5.0-bin.tar.gz" />
+	
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+	</path>
+
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+		<delete dir="${lib.dir}"/>
+		<delete dir="${tmp.dir}"/>
+		<exec executable="bash">
+			<arg value="-c"/>
+			<arg line="find -iname &quot;*.class&quot; -delete"/>
+		</exec>
+	</target>
+
+	<target name="fetch_libraries">
+		<delete dir="${lib.dir}"/>
+		<mkdir dir="${lib.dir}"/>
+		<exec executable="bash">
+			<arg value="-c"/>
+			<arg line='"wget -q -O - "${commons_cli.location}" | tar --wildcards -xzv &quot;commons-cli-1.5.0/commons-cli-1.5.0.jar&quot; ; mv -iv commons-cli-1.5.0/*.jar lib; rmdir commons-cli-1.5.0 "'/>
+		</exec>
+	</target>
+	
+	<target name="compile" depends="fetch_libraries">
+		<mkdir dir="${classes.dir}"/>
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" fork="true" executable="${javac.path}" excludes="MainProgram.java"/>
+		
+	</target>
+	
+	<target name="native_image" depends="compile">
+		<exec dir="." executable="${native_image.path}">
+			<arg value="--no-fallback" />
+			<arg value="--class-path" />
+			<arg value="${lib.dir}:${classes.dir}" />
+			<arg value="${main-class}" />
+		</exec>
+	</target>
+
+
 	
 </project>
