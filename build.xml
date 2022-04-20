@@ -43,7 +43,6 @@
 	<target name="compile" depends="fetch_libraries">
 		<mkdir dir="${classes.dir}"/>
 		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" fork="true" executable="${javac.path}" sourcepath="${src.dir}" deprecation="Yes" />
-		
 	</target>
 	
 	<!-- Important: to get the string for the classpath, use the function ${toString:classpath} -->

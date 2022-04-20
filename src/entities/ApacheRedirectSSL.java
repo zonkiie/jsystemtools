@@ -1,6 +1,6 @@
 package entities;
 
-class ApacheRedirectSSL extends ApacheRedirect
+public class ApacheRedirectSSL extends ApacheRedirect
 {
 	String CertificatePath;
 }

@@ -1,8 +1,7 @@
 package entities;
 
-class ApacheRedirect
+public class ApacheRedirect extends ApacheVHostName
 {
-	String VHostName;
 	String RedirectTarget;
 	Integer RedirectType;
 }

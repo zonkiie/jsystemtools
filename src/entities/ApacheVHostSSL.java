@@ -1,6 +1,6 @@
 package entities;
 
-class ApacheVHostSSL extends ApacheVHost
+public class ApacheVHostSSL extends ApacheVHost
 {
 	String CertificatePath;
 }
