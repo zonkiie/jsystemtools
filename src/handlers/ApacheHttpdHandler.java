@@ -6,6 +6,18 @@ import java.util.*;
 
 public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>
 {
+	private String VHostFile = null;
+	public String getVHostFile()
+	{
+		return VHostFile;
+	}
+
+	public CRUDLS<ApacheVHostName> setVHostFile(String VHostFile)
+	{
+		this.VHostFile = VHostFile;
+		return this;
+	}
+
 	private String getLineEntryForVHostName(ApacheVHostName o)
 	{
 		return null;
