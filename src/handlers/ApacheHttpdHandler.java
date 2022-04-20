@@ -24,7 +24,8 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(VHostFile));
 		StringBuilder resultStringBuilder = new StringBuilder();
-		while((String line = reader.readLine()) != null) resultStringBuilder.append(line).append("\n");
+		String line = null;
+		while((line = reader.readLine()) != null) resultStringBuilder.append(line).append("\n");
 		return resultStringBuilder.toString();
 	}
 
@@ -32,7 +33,8 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(VHostFile));
 		List<String> lines = new Vector<String>();
-		while((String line = reader.readLine()) != null) lines.add(line);
+		String line = null;
+		while((line = reader.readLine()) != null) lines.add(line);
 		return lines;
 	}
 
@@ -40,7 +42,8 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(VHostFile));
 		List<ApacheVHostName> lines = new Vector<ApacheVHostName>();
-		while((String line = reader.readLine()) != null) lines.add(parseLine(line));
+		String line = null;
+		while((line = reader.readLine()) != null) lines.add(parseLine(line));
 		return lines;
 	}
 
