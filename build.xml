@@ -5,21 +5,26 @@
 	<property name="classes.dir"			value="${build.dir}/classes" />
 	<property name="jar.dir"				value="${build.dir}/jar" />
 	<property name="main-class"				value="MainProgram" />
+	<property name="target_executable"		value="mainprogram" />
 	<property name="lib.dir"				value="lib" />
 	<property name="tmp.dir"				value="/dev/shm/ant_java_jsystemtools" />
 	<property name="java.basedir"			value="/usr/lib/jvm/graalvm-ce-java17" />
 	<property name="javac.path"				value="${java.basedir}/bin/javac" />
 	<property name="native_image.path"		value="${java.basedir}/bin/native-image" />
-	<property name="commons_cli.location"	value="https://dlcdn.apache.org//commons/cli/binaries/commons-cli-1.5.0-bin.tar.gz" />
+	<property name="exec_compessor"			value="/usr/bin/upx" />
+	<property name="commons_cli.location"	value="https://dlcdn.apache.org/commons/cli/binaries/commons-cli-1.5.0-bin.tar.gz" />
 	
+	<!-- Important: Add all compiled class directories to classpath -->
 	<path id="classpath">
 		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+		<dirset dir="${classes.dir}" />
 	</path>
 
 	<target name="clean">
 		<delete dir="${build.dir}"/>
 		<delete dir="${lib.dir}"/>
 		<delete dir="${tmp.dir}"/>
+		<delete file="${target_executable}"/>
 		<exec executable="bash">
 			<arg value="-c"/>
 			<arg line="find -iname &quot;*.class&quot; -delete"/>
@@ -37,16 +42,20 @@
 	
 	<target name="compile" depends="fetch_libraries">
 		<mkdir dir="${classes.dir}"/>
-		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" fork="true" executable="${javac.path}" excludes="MainProgram.java"/>
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" fork="true" executable="${javac.path}" sourcepath="${src.dir}" />
 		
 	</target>
 	
+	<!-- Important: to get the string for the classpath, use the function ${toString:classpath} -->
 	<target name="native_image" depends="compile">
 		<exec dir="." executable="${native_image.path}">
 			<arg value="--no-fallback" />
 			<arg value="--class-path" />
-			<arg value="${lib.dir}:${classes.dir}" />
+			<arg value="${lib.dir}:${classes.dir}:${toString:classpath}" />
 			<arg value="${main-class}" />
+		</exec>
+		<exec dir="." executable="${exec_compessor}" >
+			<arg value="${target_executable}" />
 		</exec>
 	</target>
 

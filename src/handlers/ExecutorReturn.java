@@ -1,6 +1,6 @@
 package handlers;
 
-class ExecutorReturn
+public class ExecutorReturn
 {
 	public int returnCode;
 	public String returnString;

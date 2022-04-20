@@ -5,7 +5,7 @@ import java.lang.*;
 import java.util.*;
 import java.util.stream.*;
 
-class SimpleExecutor
+public class SimpleExecutor
 {
 	public static SimpleExecutor newInstance()
 	{
