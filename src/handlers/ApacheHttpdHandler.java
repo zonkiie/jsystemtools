@@ -3,6 +3,7 @@ package handlers;
 import interfaces.*;
 import entities.*;
 import java.util.*;
+import java.io.*;
 
 public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>
 {
@@ -16,6 +17,14 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>
 	{
 		this.VHostFile = VHostFile;
 		return this;
+	}
+
+	public String loadVHostFile() throws IOException
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(VHostFile));
+		StringBuilder resultStringBuilder = new StringBuilder();
+		while((String line = reader.readLine()) != null) resultStringBuilder.append(line).append("\n");
+		return resultStringBuilder.toString();
 	}
 
 	private String getLineEntryForVHostName(ApacheVHostName o)
