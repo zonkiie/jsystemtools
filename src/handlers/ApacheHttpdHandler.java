@@ -7,6 +7,7 @@ import java.io.*;
 
 public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>
 {
+	private List<Class> VHostTypes = List.of(ApacheRedirect.class, ApacheRedirectSSL.class, ApacheVHost.class, ApacheVHostSSL.class);
 	private String VHostFile = null;
 	public String getVHostFile()
 	{
@@ -25,6 +26,27 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>
 		StringBuilder resultStringBuilder = new StringBuilder();
 		while((String line = reader.readLine()) != null) resultStringBuilder.append(line).append("\n");
 		return resultStringBuilder.toString();
+	}
+
+	public List<String> loadVHostFileLines() throws IOException
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(VHostFile));
+		List<String> lines = new Vector<String>();
+		while((String line = reader.readLine()) != null) lines.add(line);
+		return lines;
+	}
+
+	public List<ApacheVHostName> loadAndParseVHostFile() throws IOException
+	{
+		BufferedReader reader = new BufferedReader(new FileReader(VHostFile));
+		List<ApacheVHostName> lines = new Vector<ApacheVHostName>();
+		while((String line = reader.readLine()) != null) lines.add(parseLine(line));
+		return lines;
+	}
+
+	public ApacheVHostName parseLine(String line)
+	{
+		return null;
 	}
 
 	private String getLineEntryForVHostName(ApacheVHostName o)
