@@ -8,12 +8,22 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>
 {
 	private String getLineEntryForVHostName(ApacheVHostName o)
 	{
-		return "";
+		return null;
 	}
 	
 	private String setLineEntryForVHost(ApacheVHostName o)
 	{
-		return "";
+		return null;
+	}
+
+	private Class getVhostClass(ApacheVHostName o)
+	{
+		return null;
+	}
+
+	public CRUDLS<ApacheVHostName> convert(ApacheVHostName o, Class clazz)
+	{
+		return this;
 	}
 
 	public CRUDLS<ApacheVHostName> add(ApacheVHostName o)
@@ -46,3 +56,4 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>
 		return this;
 	}
 }
+
