@@ -22,6 +22,9 @@ public class MainProgram
 		{
 			final CommandLineParser parser = new DefaultParser();
 			final Options options = new Options();
+
+			String ConfigFile = null;
+
 			//options.addOption("help", false, "print this message");
 			options.addOption(Option.builder("help").required(false).hasArg(false).longOpt("help").desc("print this message").build());
 			options.addOption("projecthelp", false, "print project help information");
@@ -30,6 +33,7 @@ public class MainProgram
 			options.addOption("verbose", false, "be extra verbose");
 			options.addOption("debug", false, "print debug information");
 			options.addOption("logfile", true, "use given file for log");
+			options.addOption(Option.builder("config").required(false).hasArg(true).longOpt("config").optionalArg(false).desc("use configfile <configfile>").build());
 			options.addOption(Option.builder("ls").required(false).hasArg(true).longOpt("ls").optionalArg(true).desc("dir listing").build());
 			//options.addOption("ls", false, "dir listing");
 			final CommandLine line = parser.parse(options, args);
@@ -53,6 +57,10 @@ public class MainProgram
 					HelpFormatter formatter = new HelpFormatter();
 					formatter.printHelp("MainProgram", header, options, footer, true);
 					System.exit(0);
+				}
+				if(singleOption.getOpt().equals("config"))
+				{
+					ConfigFile = singleOption.getValue();
 				}
 			}
 			//System.out.println("Opts:" + Arrays.toString(parsedOptions));
