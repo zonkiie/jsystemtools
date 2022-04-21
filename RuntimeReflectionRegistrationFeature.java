@@ -3,6 +3,7 @@ import java.lang.reflect.*;
 import java.lang.annotation.*;
 import java.io.*;
 import java.util.*;
+import java.nio.*;
 import org.graalvm.nativeimage.*;
 import org.graalvm.nativeimage.hosted.*;
 //import com.oracle.svm.core.annotate.*;
