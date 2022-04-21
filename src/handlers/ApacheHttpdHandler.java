@@ -5,10 +5,16 @@ import entities.*;
 import java.util.*;
 import java.io.*;
 
-public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>
+public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 {
 	private List<Class> VHostTypes = List.of(ApacheRedirect.class, ApacheRedirectSSL.class, ApacheVHost.class, ApacheVHostSSL.class);
 	private String VHostFile = null;
+	
+	public String info()
+	{
+		return "Handles HTTP Configuration";
+	}
+	
 	public String getVHostFile()
 	{
 		return VHostFile;

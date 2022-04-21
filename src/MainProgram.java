@@ -4,10 +4,12 @@ import java.util.*;
 import java.util.stream.*;
 import entities.*;
 import handlers.*;
+import interfaces.*;
 import org.apache.commons.cli.*;
 
 public class MainProgram
 {
+	private static List<Class> ModuleList = List.of(ApacheHttpdHandler.class);
 	
 	public static String ls(String dir) throws Exception
 	{
@@ -23,17 +25,13 @@ public class MainProgram
 			final CommandLineParser parser = new DefaultParser();
 			final Options options = new Options();
 
-			String ConfigFile = null;
+			String ConfigFile = null, Module = null, VHostFile = null;
 
 			//options.addOption("help", false, "print this message");
 			options.addOption(Option.builder("help").required(false).hasArg(false).longOpt("help").desc("print this message").build());
-			options.addOption("projecthelp", false, "print project help information");
-			options.addOption("version", false, "print the version information and exit");
-			options.addOption("quiet", false, "be extra quiet");
-			options.addOption("verbose", false, "be extra verbose");
-			options.addOption("debug", false, "print debug information");
-			options.addOption("logfile", true, "use given file for log");
+			options.addOption("modulelist", false, "print module list information");
 			options.addOption(Option.builder("config").required(false).hasArg(true).longOpt("config").optionalArg(false).desc("use configfile <configfile>").build());
+			options.addOption(Option.builder("module").required(false).hasArg(true).longOpt("module").optionalArg(false).desc("use module <module>").build());
 			options.addOption(Option.builder("ls").required(false).hasArg(true).longOpt("ls").optionalArg(true).desc("dir listing").build());
 			//options.addOption("ls", false, "dir listing");
 			final CommandLine line = parser.parse(options, args);
@@ -58,10 +56,18 @@ public class MainProgram
 					formatter.printHelp("MainProgram", header, options, footer, true);
 					System.exit(0);
 				}
-				if(singleOption.getOpt().equals("config"))
+				if(singleOption.getOpt().equals("modulelist"))
 				{
-					ConfigFile = singleOption.getValue();
+					for(Class c: ModuleList)
+					{
+						Handler h = (Handler)c.newInstance();
+						System.out.println(c.getName());
+						System.out.println(h.info());
+					}
 				}
+				if(singleOption.getOpt().equals("config")) ConfigFile = singleOption.getValue();
+				if(singleOption.getOpt().equals("module")) Module = singleOption.getValue();
+				
 			}
 			//System.out.println("Opts:" + Arrays.toString(parsedOptions));
         }
