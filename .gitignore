@@ -25,6 +25,7 @@ hs_err_pid*
 build
 tmp
 
+**/*.kate-swp
 **/*.jar
 **/*.class
 **/mainprogram.build_artifacts.txt
