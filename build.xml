@@ -47,6 +47,7 @@
 	</target>
 
 	<target name="pack" depends="compile">
+		<mkdir dir="{jar.dir}"/>
         <jar destfile="${jarfile}" compress="false" duplicate="preserve" index="true">
             <fileset dir="${classes.dir}"/>
             <archives>
