@@ -42,6 +42,16 @@ class RuntimeReflectionRegistrationFeature implements Feature {
 		return classList;
 	}
 
+	public void recursiveJarList(List<File> fileList, File startPath)
+	{
+		if(fileList == null) fileList = new ArrayList<File>();
+		File directory = new File(startPath);
+		for(File f: directory.listFiles())
+		{
+			if(f.isDirectory()) recursiveJarList(fileList, f.getAbsolutePath());
+			else if(f.isFile() && file.getName().endsWith(".jar")) fileList.append(f);
+		}
+	}
 
 	// From baeldung
     public static Set<String> getClassNamesFromJarFile(File givenFile) throws IOException {
@@ -74,7 +84,7 @@ class RuntimeReflectionRegistrationFeature implements Feature {
     
     public List<Class> getClassesInPackage(String packagePath)
     {
-
+		return null;
     }
 	
 	// Register Class with Fields and Methods
