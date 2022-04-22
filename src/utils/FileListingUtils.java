@@ -1,11 +1,13 @@
 import java.io.*;
 import java.util.*;
+import java.util.jar.*;
+import java.util.zip.*;
 
 public class FileListingUtils
 {
 	public static List<File> scanFiles(File path, Boolean recursive)
 	{
-		List<Class> fileList = new ArrayList<Class>();
+		List<File> fileList = new ArrayList<File>();
 		for(File entry: path.listFiles())
 		{
 			if(entry.isDirectory() && recursive == true) fileList.addAll(scanFiles(entry, recursive));
@@ -17,9 +19,9 @@ public class FileListingUtils
 	/**
 	* create a list of files which matches against the given regex pattern
 	*/
-	public static List<File> scanFiles(File path, String pattern, Boolean recursive)
+	public static List<File> scanFiles(File path, String pattern, Boolean recursive) throws IOException
 	{
-		List<Class> fileList = new ArrayList<Class>();
+		List<File> fileList = new ArrayList<File>();
 		for(File entry: path.listFiles())
 		{
 			if(entry.isDirectory() && recursive == true) fileList.addAll(scanFiles(entry, pattern, recursive));
@@ -28,18 +30,32 @@ public class FileListingUtils
 		return fileList;
 	}
 	
-	public static List<File> scanFiles(File path, String pattern)
+	public static List<File> scanArchive(File path, String pattern, Boolean recursive) throws IOException
 	{
-		return scanFiles(path, pattern, true);
+		List<File> fileList = new ArrayList<File>();
+		JarFile jarFile = new JarFile(path);
+		Enumeration<JarEntry> e = jarFile.entries();
+		while (e.hasMoreElements()) {
+			JarEntry jarEntry = e.nextElement();
+			if (jarEntry.getName().matches(pattern) && !jarEntry.isDirectory()) {
+				fileList.add(new File(jarEntry.getName()));
+			}
+		}
+		return fileList;
 	}
 	
-	public static List<File> scanFiles(String path, Boolean recursive)
+	public static List<File> scanArchive(File path, Boolean recursive) throws IOException
 	{
-		return scanFiles(new File(path), true);
+		List<File> fileList = new ArrayList<File>();
+		JarFile jarFile = new JarFile(path);
+		Enumeration<JarEntry> e = jarFile.entries();
+		while (e.hasMoreElements()) {
+			JarEntry jarEntry = e.nextElement();
+			if (!jarEntry.isDirectory()) {
+				fileList.add(new File(jarEntry.getName()));
+			}
+		}
+		return fileList;
 	}
 	
-	public static List<File> scanFiles(String path, String pattern, Boolean recursive)
-	{
-		return scanFiles(new File(path), pattern, recursive);
-	}
 }

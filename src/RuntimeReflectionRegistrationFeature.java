@@ -3,6 +3,9 @@ import java.lang.reflect.*;
 import java.lang.annotation.*;
 import java.io.*;
 import java.util.*;
+import java.util.jar.*;
+import java.util.zip.*;
+import java.net.*;
 import java.nio.*;
 import org.graalvm.nativeimage.*;
 import org.graalvm.nativeimage.hosted.*;
@@ -46,11 +49,11 @@ class RuntimeReflectionRegistrationFeature implements Feature {
 	public void recursiveJarList(List<File> fileList, File startPath)
 	{
 		if(fileList == null) fileList = new ArrayList<File>();
-		File directory = new File(startPath);
-		for(File f: directory.listFiles())
+		//File directory = new File(startPath);
+		for(File f: startPath.listFiles())
 		{
-			if(f.isDirectory()) recursiveJarList(fileList, f.getAbsolutePath());
-			else if(f.isFile() && file.getName().endsWith(".jar")) fileList.append(f);
+			if(f.isDirectory()) recursiveJarList(fileList, f.getAbsoluteFile());
+			else if(f.isFile() && f.getName().endsWith(".jar")) fileList.add(f);
 		}
 	}
 
