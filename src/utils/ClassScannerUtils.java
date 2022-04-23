@@ -13,7 +13,7 @@ public class ClassScannerUtils
 		Set<Class> classList = new HashSet<Class>();
 		for(File f: FileListingUtils.scanFiles(path, ".*\\.class$", recursive))
 		{
-			System.out.println("Scan:" + f.getPath());
+			System.out.println("Scan:" + f.getPath() + " in " + f.getAbsoluteFile().getParentFile().getPath());
 			URLClassLoader cl = URLClassLoader.newInstance(new URL[]{f.getAbsoluteFile().getParentFile().toURI().toURL()});
 			Class clazz = cl.loadClass(f.getPath());
 			classList.add(clazz);
