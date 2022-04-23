@@ -10,7 +10,7 @@
 	<property name="tmp.dir"				value="/dev/shm/ant_java_jsystemtools" />
 	<property name="java.basedir"			value="/usr/lib/jvm/graalvm-ce-java17" />
 	<property name="javac.path"				value="${java.basedir}/bin/javac" />
-	<property name="jarfile"				value="build/MainProgram.jar" />
+	<property name="jarfile"				value="${jar.dir}/MainProgram.jar" />
 	<property name="native_image.path"		value="${java.basedir}/bin/native-image" />
 	<property name="exec_compessor"			value="/usr/bin/upx" />
 	<property name="commons_cli.location"	value="https://dlcdn.apache.org/commons/cli/binaries/commons-cli-1.5.0-bin.tar.gz" />
@@ -43,7 +43,7 @@
 	
 	<target name="compile" depends="fetch_libraries">
 		<mkdir dir="${classes.dir}"/>
-		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" fork="true" executable="${javac.path}" sourcepath="${src.dir}" deprecation="Yes" />
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" fork="true" executable="${javac.path}" sourcepath="${src.dir}" deprecation="Yes" target="1.8" debug="true" />
 	</target>
 
 	<target name="pack" depends="compile">
@@ -60,7 +60,8 @@
                 <attribute name="Class-Path" value="lib/ classes/" />
                 <attribute name="Built-By" value="zonkiie" />
             </manifest>
-        </jar>    
+        </jar>  
+		<chmod file="${jarfile}" perm="ugo+rx"/>
     </target>
 	
 	<!-- Important: to get the string for the classpath, use the function ${toString:classpath} -->

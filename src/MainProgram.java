@@ -5,6 +5,7 @@ import java.util.stream.*;
 import entities.*;
 import handlers.*;
 import interfaces.*;
+import utils.*;
 import org.apache.commons.cli.*;
 
 public class MainProgram
@@ -32,6 +33,7 @@ public class MainProgram
 			options.addOption("modulelist", false, "print module list information");
 			options.addOption(Option.builder("config").required(false).hasArg(true).longOpt("config").optionalArg(false).desc("use configfile <configfile>").build());
 			options.addOption(Option.builder("module").required(false).hasArg(true).longOpt("module").optionalArg(false).desc("use module <module>").build());
+			options.addOption(Option.builder("classlist").required(false).hasArg(false).longOpt("classlist").optionalArg(false).desc("list all classes in all subdirs and jars").build());
 			options.addOption(Option.builder("ls").required(false).hasArg(true).longOpt("ls").optionalArg(true).desc("dir listing").build());
 			//options.addOption("ls", false, "dir listing");
 			final CommandLine line = parser.parse(options, args);
@@ -64,6 +66,15 @@ public class MainProgram
 						System.out.println(c.getName());
 						System.out.println(h.info());
 					}
+					System.exit(0);
+				}
+				if(singleOption.getOpt().equals("classlist"))
+				{
+					for(Class clazz: ClassScannerUtils.getAllClassesInPath(new File("."), true))
+					{
+						System.out.println(clazz.getCanonicalName());
+					}
+					System.exit(0);
 				}
 				if(singleOption.getOpt().equals("config")) ConfigFile = singleOption.getValue();
 				if(singleOption.getOpt().equals("module")) Module = singleOption.getValue();
@@ -73,7 +84,8 @@ public class MainProgram
         }
         catch(Exception ex)
         {
-			System.err.println("Error:" + ex.getMessage());
+			System.err.println("Error:" + ex.getMessage() + ", " + ex.getCause());
+			ex.printStackTrace();
         }
 		
 	}
