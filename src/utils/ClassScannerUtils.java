@@ -8,24 +8,45 @@ import java.util.zip.*;
 
 public class ClassScannerUtils
 {
-	public static Set<Class> getAllClassesInPath(File path, Boolean recursive) throws IOException, MalformedURLException, ClassNotFoundException
+	public static Set<Class> getAllClassesInPath(File path, Boolean recursive) throws IOException, MalformedURLException
 	{
 		Set<Class> classList = new HashSet<Class>();
 		for(File f: FileListingUtils.scanFiles(path, ".*\\.class$", recursive))
 		{
-			System.out.println("Scan:" + f.getPath() + " in " + f.getAbsoluteFile().getParentFile().getPath());
-			URLClassLoader cl = URLClassLoader.newInstance(new URL[]{f.getAbsoluteFile().getParentFile().toURI().toURL()});
-			Class clazz = cl.loadClass(f.getPath());
-			classList.add(clazz);
+			if(!f.exists()) throw new IOException("File " + f.getPath() + " not found!");
+			//URLClassLoader cl = URLClassLoader.newInstance(new URL[]{path.toURI().toURL()});
+			try
+			{
+				Class clazz = new ClassLoaderFromClassFile(new URL[]{path.toURI().toURL()}).getClassFromPath(f.getCanonicalFile());
+				//System.out.println("Class: " + clazz.getCanonicalName());
+				//Class clazz = cl.loadClass("file:/" + f.getCanonicalPath());
+				if(clazz != null) classList.add(clazz);
+			}
+			catch(/*ClassNotFoundException*/ Exception ex)
+			{
+				//System.out.println("ClassFiles: Class not found:" + ex.getMessage());
+			}
 		}
 		for(File archive: FileListingUtils.scanFiles(path, ".*\\.jar", recursive))
 		{
 			URLClassLoader cl = URLClassLoader.newInstance(new URL[] { new URL("jar:file:" + archive.getPath() + "!/") });
 			for(File archContent: FileListingUtils.scanArchive(archive, ".*\\.class$", recursive))
 			{
-				System.out.println("Scan:" + archive.getPath() + "/" + archContent.getPath());
-				Class clazz = cl.loadClass(archContent.getPath());
-				classList.add(clazz);
+				//System.out.println("Scan:" + archive.getPath() + "/" + archContent.getPath());
+				try
+				{
+					String className = archContent.getPath().replaceAll("\\.[^.]*$", "").replaceAll("/", ".");
+					Class clazz = cl.loadClass(className);
+					if(clazz != null) classList.add(clazz);
+				}
+				catch(ClassNotFoundException ex)
+				{
+					//System.out.println("Class not found:" + ex.getMessage());
+				}
+				catch(NoClassDefFoundError ex)
+				{
+					//System.out.println("NoClassDefFoundError:" + ex.getMessage());
+				}
 			}
 		}
 		return classList;
