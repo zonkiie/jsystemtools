@@ -51,4 +51,15 @@ public class ClassScannerUtils
 		}
 		return classList;
 	}
+	
+	public static Set<String> getAllClassNamesInPath(File path, Boolean recursive) throws IOException, MalformedURLException
+	{
+		Set<String> classNameList = new HashSet<String>();
+		for(Class clazz: getAllClassesInPath(path, recursive))
+		{
+			if(clazz == null || clazz.getCanonicalName() == null) continue;
+			classNameList.add(clazz.getCanonicalName());
+		}
+		return classNameList;
+	}
 }

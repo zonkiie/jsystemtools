@@ -70,9 +70,13 @@ public class MainProgram
 				}
 				if(singleOption.getOpt().equals("classlist"))
 				{
-					for(Class clazz: ClassScannerUtils.getAllClassesInPath(new File("."), true))
+					/*for(Class clazz: ClassScannerUtils.getAllClassesInPath(new File("."), true))
 					{
 						System.out.println(clazz.getCanonicalName());
+					}*/
+					for(String className: ClassScannerUtils.getAllClassNamesInPath(new File("."), true))
+					{
+						System.out.println(className);
 					}
 					System.exit(0);
 				}
