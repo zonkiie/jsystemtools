@@ -70,14 +70,8 @@ public class MainProgram
 				}
 				if(singleOption.getOpt().equals("classlist"))
 				{
-					/*for(Class clazz: ClassScannerUtils.getAllClassesInPath(new File("."), true))
-					{
-						System.out.println(clazz.getCanonicalName());
-					}*/
-					for(String className: ClassScannerUtils.getAllClassNamesInPath(new File("."), true))
-					{
-						System.out.println(className);
-					}
+					for(Class clazz: ClassScannerUtils.getAllClassesInPath(new File("build/classes"), true)) System.out.println(clazz.getCanonicalName());
+					//for(String className: ClassScannerUtils.getAllClassNamesInPath(new File("."), true)) System.out.println(className);
 					System.exit(0);
 				}
 				if(singleOption.getOpt().equals("config")) ConfigFile = singleOption.getValue();

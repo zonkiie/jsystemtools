@@ -66,8 +66,9 @@
 	
 	<!-- Important: to get the string for the classpath, use the function ${toString:classpath} -->
 	<target name="native_image" depends="compile">
-		<exec dir="." executable="${native_image.path}">
+		<exec dir="." executable="${native_image.path}" failonerror="true">
 			<arg value="--no-fallback" />
+			<arg value="--features=RuntimeReflectionRegistrationFeature" />
 			<arg value="--class-path" />
 			<arg value="${lib.dir}:${classes.dir}:${toString:classpath}" />
 			<arg value="${main-class}" />

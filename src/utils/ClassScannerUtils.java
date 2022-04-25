@@ -21,10 +21,10 @@ public class ClassScannerUtils
 				{
 					String className = archContent.getPath().replaceAll("\\.[^.]*$", "").replaceAll("/", ".");
 					Class clazz = cl.loadClass(className);
-					if(clazz != null) classList.add(clazz);
+					if(clazz != null && clazz.getCanonicalName() != null) classList.add(clazz);
 				}
-				catch(ClassNotFoundException ex) { }
-				catch(NoClassDefFoundError ex) { }
+				// Multi Catch here
+				catch(ClassNotFoundException | NoClassDefFoundError ex) { }
 			}
 			return classList;
 		}
@@ -33,7 +33,7 @@ public class ClassScannerUtils
 			try
 			{
 				Class clazz = new ClassLoaderFromClassFile(new URL[]{path.toURI().toURL()}).getClassFromPath(path.getCanonicalFile());
-				if(clazz != null) classList.add(clazz);
+				if(clazz != null && clazz.getCanonicalName() != null) classList.add(clazz);
 			}
 			catch(Exception ex) { }
 			return classList;
