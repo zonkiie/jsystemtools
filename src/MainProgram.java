@@ -26,13 +26,16 @@ public class MainProgram
 			final CommandLineParser parser = new DefaultParser();
 			final Options options = new Options();
 
-			String ConfigFile = null, Module = null, VHostFile = null;
+			String ConfigFile = null, module = null, VHostFile = null, method = null;
+			Vector<String> callArgs = new Vector<String>();
 
 			//options.addOption("help", false, "print this message");
 			options.addOption(Option.builder("help").required(false).hasArg(false).longOpt("help").desc("print this message").build());
 			options.addOption("modulelist", false, "print module list information");
 			options.addOption(Option.builder("config").required(false).hasArg(true).longOpt("config").optionalArg(false).desc("use configfile <configfile>").build());
 			options.addOption(Option.builder("module").required(false).hasArg(true).longOpt("module").optionalArg(false).desc("use module <module>").build());
+			options.addOption(Option.builder("method").required(false).hasArg(true).longOpt("method").optionalArg(false).desc("use method <method>").build());
+			options.addOption(Option.builder("arg").required(false).hasArg(true).longOpt("arg").optionalArg(false).desc("use argument <argument>").build());
 			options.addOption(Option.builder("classlist").required(false).hasArg(false).longOpt("classlist").optionalArg(false).desc("list all classes in all subdirs and jars").build());
 			options.addOption(Option.builder("ls").required(false).hasArg(true).longOpt("ls").optionalArg(true).desc("dir listing").build());
 			//options.addOption("ls", false, "dir listing");
@@ -75,8 +78,13 @@ public class MainProgram
 					System.exit(0);
 				}
 				if(singleOption.getOpt().equals("config")) ConfigFile = singleOption.getValue();
-				if(singleOption.getOpt().equals("module")) Module = singleOption.getValue();
-				
+				if(singleOption.getOpt().equals("module")) module = singleOption.getValue();
+				if(singleOption.getOpt().equals("method")) method = singleOption.getValue();
+				if(singleOption.getOpt().equals("arg")) callArgs.add(singleOption.getValue());
+			}
+			if(module != null && method != null)
+			{
+				System.out.println(CallDispatcher.Call(module, method, callArgs.toArray()));
 			}
 			//System.out.println("Opts:" + Arrays.toString(parsedOptions));
         }

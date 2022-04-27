@@ -17,15 +17,17 @@ public class CallDispatcher
 			for(Object arg: args) classVec.add(arg.getClass());
 			for(Method m: clazz.getMethods())
 			{
+				if(!(m.getName().equals(MethodName))) continue;
 				if(Arrays.equals(m.getParameterTypes(), classVec.toArray()))
 				{
 					return m.invoke(instance, args);
 				}
 			}
+			throw new NoSuchMethodException("No suitable method found!");
 		}
-		catch(ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException ex)
+		catch(ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex)
 		{
-			System.err.println(ex.getMessage());
+			System.err.println("Exception! " + ex.getMessage());
 		}
 		return null;
 	}

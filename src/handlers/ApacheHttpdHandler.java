@@ -15,6 +15,11 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return "Handles HTTP Configuration";
 	}
 	
+	public String echo2(String str1, String str2)
+	{
+		return "Hello " + str1 + ", " + str2;
+	}
+	
 	public String getVHostFile()
 	{
 		return VHostFile;
