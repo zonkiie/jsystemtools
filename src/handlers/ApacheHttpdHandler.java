@@ -10,11 +10,19 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 	private List<Class> VHostTypes = List.of(ApacheRedirect.class, ApacheRedirectSSL.class, ApacheVHost.class, ApacheVHostSSL.class);
 	private String VHostFile = null;
 	
+	@PublicCallable
 	public String info()
 	{
 		return "Handles HTTP Configuration";
 	}
 	
+	//@PublicCallable
+	public String help()
+	{
+		return "Handles HTTP Configuration";
+	}
+	
+	@PublicCallable
 	public String echo2(String str1, String str2)
 	{
 		return "Hello " + str1 + ", " + str2;

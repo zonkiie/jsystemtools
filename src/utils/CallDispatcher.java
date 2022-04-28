@@ -2,8 +2,11 @@ package utils;
 
 import java.io.*;
 import java.lang.*;
+import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import utils.*;
+import interfaces.*;
 
 public class CallDispatcher
 {
@@ -18,6 +21,9 @@ public class CallDispatcher
 			for(Method m: clazz.getMethods())
 			{
 				if(!(m.getName().equals(MethodName))) continue;
+				PublicCallable publicCallable = m.getAnnotation(PublicCallable.class);
+				// Security barrier wich allows only @publicCallable annotated methods to be public called
+				if(publicCallable == null) throw new NoSuchMethodException("No allowed method found!"); //return null;
 				if(Arrays.equals(m.getParameterTypes(), classVec.toArray()))
 				{
 					return m.invoke(instance, args);
