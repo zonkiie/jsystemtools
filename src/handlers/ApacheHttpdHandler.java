@@ -5,6 +5,7 @@ import entities.*;
 import java.util.*;
 import java.io.*;
 
+@PublicCallable
 public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 {
 	private List<Class> VHostTypes = List.of(ApacheRedirect.class, ApacheRedirectSSL.class, ApacheVHost.class, ApacheVHostSSL.class);

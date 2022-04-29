@@ -27,11 +27,13 @@ public class MainProgram
 			final Options options = new Options();
 
 			String ConfigFile = null, module = null, VHostFile = null, method = null;
+			boolean verbose = false;
 			Vector<String> callArgs = new Vector<String>();
 
 			//options.addOption("help", false, "print this message");
 			options.addOption(Option.builder("help").required(false).hasArg(false).longOpt("help").desc("print this message").build());
-			options.addOption("modulelist", false, "print module list information");
+			options.addOption(Option.builder("modulelist").required(false).hasArg(false).longOpt("modulelist").desc("print module list information").build());
+			options.addOption(Option.builder("verbose").required(false).hasArg(false).longOpt("verbose").desc("verbose operation").build());
 			options.addOption(Option.builder("config").required(false).hasArg(true).longOpt("config").optionalArg(false).desc("use configfile <configfile>").build());
 			options.addOption(Option.builder("module").required(false).hasArg(true).longOpt("module").optionalArg(false).desc("use module <module>").build());
 			options.addOption(Option.builder("method").required(false).hasArg(true).longOpt("method").optionalArg(false).desc("use method <method>").build());
@@ -46,7 +48,8 @@ public class MainProgram
 			final Option[] parsedOptions = line.getOptions();
 			for(Option singleOption: parsedOptions)
 			{
-				System.out.println("Option " + singleOption.getOpt() + ":" + singleOption.getValue());
+				if(singleOption.getOpt().equals("verbose")) verbose = true;
+				if(verbose) System.err.println("Option " + singleOption.getOpt() + ":" + singleOption.getValue());
 				if(singleOption.getOpt().equals("ls"))
 				{
 					String dir = (singleOption.getValue() != null)?singleOption.getValue():".";
@@ -65,10 +68,12 @@ public class MainProgram
 				{
 					for(Class c: ModuleList)
 					{
-						Handler h = (Handler)c.newInstance();
+						// Former Code: Handler h = (Handler)c.newInstance();
+						Handler h = (Handler)c.getDeclaredConstructor().newInstance();
 						System.out.println(c.getName());
 						System.out.println(h.info());
 					}
+					System.out.println("Note: Use Canoncal Name including Package Name for a call! Otherwise a Class/Module cannot be found!");
 					System.exit(0);
 				}
 				if(singleOption.getOpt().equals("classlist"))
