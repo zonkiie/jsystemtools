@@ -17,6 +17,12 @@
 	<property name="commons_cli.extract"		value="commons-cli-1.5.0/commons-cli-1.5.0.jar" />
 	<property name="commons_config.location"	value="https://dlcdn.apache.org//commons/configuration/binaries/commons-configuration2-2.7-bin.tar.gz" />
 	<property name="commons_config.extract"		value="commons-configuration2-2.7/commons-configuration2-2.7.jar" />
+	<property name="snake_yaml.location"		value="https://repo1.maven.org/maven2/org/yaml/snakeyaml/1.30/snakeyaml-1.30.jar" />
+	<property name="snake_yaml.extract"			value="snakeyaml-1.30.jar" />
+	<property name="commons_beanutils.location"	value="https://repo1.maven.org/maven2/commons-beanutils/commons-beanutils/1.9.4/commons-beanutils-1.9.4.jar" />
+	<property name="commons_beanutils.extract"	value="commons-beanutils-1.9.4.jar" />
+	<property name="commons_collections.location"	value="https://dlcdn.apache.org//commons/collections/binaries/commons-collections4-4.4-bin.tar.gz" />
+	<property name="commons_collections.extract"	value="commons-collections4-4.4/commons-collections4-4.4.jar" />
 	
 	<!-- Important: Add all compiled class directories to classpath -->
 	<path id="classpath">
@@ -45,6 +51,18 @@
 		<exec executable="bash">
 			<arg value="-c"/>
 			<arg line='"wget -q -O - &quot;${commons_config.location}&quot; | tar --wildcards -xzv &quot;${commons_config.extract}&quot; ; mv -iv ${commons_config.extract} lib; rmdir $(dirname ${commons_config.extract}) "'/>
+		</exec>
+		<exec executable="bash">
+			<arg value="-c"/>
+			<arg line='"wget -q -O - &quot;${commons_collections.location}&quot; | tar --wildcards -xzv &quot;${commons_collections.extract}&quot; ; mv -iv ${commons_collections.extract} lib; rmdir $(dirname ${commons_collections.extract}) "'/>
+		</exec>
+		<exec executable="bash">
+			<arg value="-c"/>
+			<arg line='"wget -q -O &quot;${lib.dir}/${snake_yaml.extract}&quot; &quot;${snake_yaml.location}&quot;"'/>
+		</exec>
+		<exec executable="bash">
+			<arg value="-c"/>
+			<arg line='"wget -q -O &quot;${lib.dir}/${commons_beanutils.extract}&quot; &quot;${commons_beanutils.location}&quot;"'/>
 		</exec>
 	</target>
 	
