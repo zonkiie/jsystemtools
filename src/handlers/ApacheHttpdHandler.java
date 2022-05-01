@@ -69,6 +69,14 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 
 	public ApacheVHostName parseLine(String line)
 	{
+		Scanner s = new Scanner(input);
+		new Scanner(System.in).findAll("Use (\\s+) (\\s+) (\\s+) ?(\\s+)?").forEach(result -> {
+			Object instance = Class.forName("entities." + result.group(1).newInstance();
+            String typeName = result.group(1);
+            String vhostName = result.group(2);
+            String target = result.group(3);
+            String type = result.group(4);
+        });
 		return null;
 	}
 
