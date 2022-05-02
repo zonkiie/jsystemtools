@@ -2,6 +2,6 @@ package entities;
 
 public abstract class ApacheVHostName
 {
-	String VHostName;
+	public String VHostName;
 }
 

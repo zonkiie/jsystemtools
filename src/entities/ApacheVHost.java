@@ -2,5 +2,5 @@ package entities;
 
 public class ApacheVHost extends ApacheVHostName
 {
-	String DocumentRoot;
+	public String DocumentRoot;
 }

@@ -4,6 +4,8 @@ import interfaces.*;
 import entities.*;
 import java.util.*;
 import java.io.*;
+import java.lang.*;
+import java.lang.reflect.*;
 
 @PublicCallable
 public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
@@ -17,7 +19,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return "Handles HTTP Configuration";
 	}
 	
-	//@PublicCallable
+	@PublicCallable
 	public String help()
 	{
 		return "Handles HTTP Configuration";
@@ -27,6 +29,25 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 	public String echo2(String str1, String str2)
 	{
 		return "Hello " + str1 + ", " + str2;
+	}
+	
+	@PublicCallable
+	public String testHandler()
+	{
+		this.VHostFile = "/dev/shm/VhostFile.conf";
+		try
+		{
+			String str = "Use ApacheVHost www.example.com /home/example/htdocs\nUse ApacheRedirect www2.example.com http://www.google.de\n";
+			BufferedWriter writer = new BufferedWriter(new FileWriter(this.VHostFile));
+			writer.write(str);
+			writer.close();
+			
+		}
+		catch(Exception ex)
+		{
+			System.err.println("Exception " + ex.getMessage());
+			return null;
+		}
 	}
 	
 	public String getVHostFile()
@@ -69,15 +90,21 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 
 	public ApacheVHostName parseLine(String line)
 	{
-		Scanner s = new Scanner(input);
-		new Scanner(System.in).findAll("Use (\\s+) (\\s+) (\\s+) ?(\\s+)?").forEach(result -> {
-			Object instance = Class.forName("entities." + result.group(1).newInstance();
-            String typeName = result.group(1);
+		//Scanner s = new Scanner(input);
+		ApacheVHostName instance = null;
+		new Scanner(line).findAll("Use (\\s+) (\\s+) (\\s+) ?(\\s+)?").forEach(result -> {
+			String className = "entities." + result.group(1);
+			System.err.println("ClassName:" + className);
+			return className;
+			/*instance = Class.forName("entities." + result.group(1)).getDeclaredConstructor().newInstance();
+			Field fieldVhostName = instance.getClass().getDeclaredField("VHostName");
+			fieldVhostName.set(instance, result.group(1));*/
+            /*String typeName = result.group(1);
             String vhostName = result.group(2);
             String target = result.group(3);
-            String type = result.group(4);
+            String type = result.group(4);*/
         });
-		return null;
+		return instance;
 	}
 
 	private String getLineEntryForVHostName(ApacheVHostName o)
