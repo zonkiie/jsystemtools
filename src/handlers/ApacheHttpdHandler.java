@@ -3,6 +3,7 @@ package handlers;
 import interfaces.*;
 import entities.*;
 import java.util.*;
+import java.util.regex.*;
 import java.io.*;
 import java.lang.*;
 import java.lang.reflect.*;
@@ -42,12 +43,15 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			writer.write(str);
 			writer.close();
 			
+			String line = "Use ApacheVHost www.example.com /home/example/htdocs";
+			parseLine(line);
+			
 		}
 		catch(Exception ex)
 		{
 			System.err.println("Exception " + ex.getMessage());
-			return null;
 		}
+		return null;
 	}
 	
 	public String getVHostFile()
@@ -88,23 +92,27 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return lines;
 	}
 
-	public ApacheVHostName parseLine(String line)
+	public ApacheVHostName parseLine(String line) 
 	{
-		//Scanner s = new Scanner(input);
-		ApacheVHostName instance = null;
-		new Scanner(line).findAll("Use (\\s+) (\\s+) (\\s+) ?(\\s+)?").forEach(result -> {
-			String className = "entities." + result.group(1);
-			System.err.println("ClassName:" + className);
-			return className;
-			/*instance = Class.forName("entities." + result.group(1)).getDeclaredConstructor().newInstance();
-			Field fieldVhostName = instance.getClass().getDeclaredField("VHostName");
-			fieldVhostName.set(instance, result.group(1));*/
-            /*String typeName = result.group(1);
-            String vhostName = result.group(2);
-            String target = result.group(3);
-            String type = result.group(4);*/
-        });
-		return instance;
+	
+		try
+		{
+			Scanner scanner = new Scanner(line);
+			scanner.findInLine("Use\\s+(\\w+)\\s+([\\w\\.\\-]+)\\s+([\\w\\.\\-\\/]+)\\s?(\\w+)?");
+			MatchResult result = scanner.match();
+			//result.groupCount()
+			ApacheVHostName instance = (ApacheVHostName) Class.forName("entities." + result.group(1)).getDeclaredConstructor().newInstance();
+			System.err.println("Class:" + instance.getClass());
+			instance.getClass().getField("VHostName").set(instance, result.group(1));
+			scanner.close();
+			return instance;
+		}
+		catch(ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchFieldException ex)
+		{
+			System.err.println("Exception " + ex.getMessage());
+			ex.printStackTrace();
+			return null;
+		}
 	}
 
 	private String getLineEntryForVHostName(ApacheVHostName o)
