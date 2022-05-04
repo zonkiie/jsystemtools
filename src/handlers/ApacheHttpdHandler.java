@@ -7,6 +7,7 @@ import java.util.regex.*;
 import java.io.*;
 import java.lang.*;
 import java.lang.reflect.*;
+import org.apache.commons.lang3.builder.*;
 
 @PublicCallable
 public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
@@ -44,7 +45,8 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			writer.close();
 			
 			String line = "Use ApacheVHost www.example.com /home/example/htdocs";
-			parseLine(line);
+			Object result = parseLine(line);
+			System.out.println(ToStringBuilder.reflectionToString(result));
 			
 		}
 		catch(Exception ex)
@@ -103,7 +105,8 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			//result.groupCount()
 			ApacheVHostName instance = (ApacheVHostName) Class.forName("entities." + result.group(1)).getDeclaredConstructor().newInstance();
 			System.err.println("Class:" + instance.getClass());
-			instance.getClass().getField("VHostName").set(instance, result.group(1));
+			instance.getClass().getField("VHostName").set(instance, result.group(2));
+			instance.getClass().getField("DocumentRoot").set(instance, result.group(3));
 			scanner.close();
 			return instance;
 		}
