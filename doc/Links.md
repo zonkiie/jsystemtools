@@ -4,3 +4,4 @@ https://stackoverflow.com/questions/3298954/how-to-read-the-fully-qualified-name
 https://commons.apache.org/proper/commons-cli/
 https://www.baeldung.com/java-find-all-classes-in-package
 https://stackoverflow.com/questions/16981232/is-there-an-equivalent-method-to-cs-scanf-in-java
+https://stackoverflow.com/questions/15588903/get-group-names-in-java-regex
