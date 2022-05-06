@@ -2,6 +2,7 @@ package handlers;
 
 import interfaces.*;
 import entities.*;
+import utils.*;
 import java.util.*;
 import java.util.regex.*;
 import java.io.*;
@@ -99,7 +100,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 	
 		try
 		{
-			Scanner scanner = new Scanner(line);
+			/*Scanner scanner = new Scanner(line);
 			scanner.findInLine("Use\\s+(\\w+)\\s+([\\w\\.\\-]+)\\s+([\\w\\.\\-\\/]+)\\s?(\\w+)?");
 			MatchResult result = scanner.match();
 			//result.groupCount()
@@ -107,10 +108,34 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			System.err.println("Class:" + instance.getClass());
 			instance.getClass().getField("VHostName").set(instance, result.group(2));
 			instance.getClass().getField("DocumentRoot").set(instance, result.group(3));
-			scanner.close();
+			scanner.close();*/
+			ApacheVHostName instance = null;
+			Pattern usageLine = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)\\s+(?<VHostName>[\\w\\.\\-]+)\\s+(?<DocumentRoot>[\\w\\.\\-\\/]+)\\s?(?<RedirectType>\\w+)?");
+			Matcher matcher = usageLine.matcher(line);
+			
+			List<String> groupNames = RegexHelper.getRegexNamedGroups(usageLine.pattern());
+			Field field;
+			
+			if(matcher.find() && matcher.groupCount() >= 3)
+			{
+				instance = (ApacheVHostName) Class.forName("entities." + matcher.group("VHostDirective")).getDeclaredConstructor().newInstance();
+				Iterator<String> groupNamesIterator = groupNames.iterator();
+				while(groupNamesIterator.hasNext())
+				{
+					String fieldName = groupNamesIterator.next();
+					if(fieldName.equals("VHostDirective")) continue;
+					try
+					{
+						field = instance.getClass().getField(fieldName);
+						instance.getClass().getField(fieldName).set(instance, matcher.group(fieldName));
+					}
+					catch(NoSuchFieldException ex) {}
+				}
+			}
 			return instance;
 		}
-		catch(ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchFieldException ex)
+		//catch(ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchFieldException ex)
+		catch(Exception ex)
 		{
 			System.err.println("Exception " + ex.getMessage());
 			ex.printStackTrace();
