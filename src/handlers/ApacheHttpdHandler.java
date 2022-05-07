@@ -138,13 +138,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 					{
 						String fieldName = groupNamesIterator.next();
 						if(fieldName.equals("VHostDirective")) continue;
-						try
-						{
-							//System.err.println("FieldName:" + fieldName);
-							field = instance.getClass().getField(fieldName);
-							instance.getClass().getField(fieldName).set(instance, innerMatcher.group(fieldName));
-						}
-						catch(NoSuchFieldException ex) {}
+						if(ReflectionHelper.hasField(instance.getClass(), fieldName)) instance.getClass().getField(fieldName).set(instance, innerMatcher.group(fieldName));
 					}
 				}
 			}
