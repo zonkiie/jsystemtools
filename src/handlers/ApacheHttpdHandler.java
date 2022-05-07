@@ -110,15 +110,22 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			instance.getClass().getField("DocumentRoot").set(instance, result.group(3));
 			scanner.close();*/
 			ApacheVHostName instance = null;
-			Pattern usageLine = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)\\s+(?<VHostName>[\\w\\.\\-]+)\\s+(?<DocumentRoot>[\\w\\.\\-\\/]+)\\s?(?<RedirectType>\\w+)?");
+			//Pattern usageLine = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)\\s+(?<VHostName>[\\w\\.\\-]+)\\s+(?<DocumentRoot>[\\w\\.\\-\\/]+)\\s?(?<RedirectType>\\w+)?");
+			Pattern usageLine = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)");
 			Matcher matcher = usageLine.matcher(line);
 			
-			List<String> groupNames = RegexHelper.getRegexNamedGroups(usageLine.pattern());
 			Field field;
 			
-			if(matcher.find() && matcher.groupCount() >= 3)
+			if(matcher.find() && matcher.groupCount() >= 1)
 			{
 				instance = (ApacheVHostName) Class.forName("entities." + matcher.group("VHostDirective")).getDeclaredConstructor().newInstance();
+				VHostLinePattern vhlp = instance.getClass().getAnnotation(VHostLinePattern.class);
+				Pattern innerPattern = Pattern.compile(vhlp.pattern());
+				Matcher innerMatcher = innerPattern.matcher(line);
+				
+				//List<String> groupNames = RegexHelper.getRegexNamedGroups(usageLine.pattern());
+				System.err.println("Inner Pattern:" + innerPattern.pattern());
+				List<String> groupNames = RegexHelper.getRegexNamedGroups(innerPattern.pattern());
 				Iterator<String> groupNamesIterator = groupNames.iterator();
 				while(groupNamesIterator.hasNext())
 				{
@@ -126,8 +133,9 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 					if(fieldName.equals("VHostDirective")) continue;
 					try
 					{
+						System.err.println("FieldName:" + fieldName);
 						field = instance.getClass().getField(fieldName);
-						instance.getClass().getField(fieldName).set(instance, matcher.group(fieldName));
+						instance.getClass().getField(fieldName).set(instance, innerMatcher.group(fieldName));
 					}
 					catch(NoSuchFieldException ex) {}
 				}
