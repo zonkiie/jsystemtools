@@ -123,21 +123,21 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 				Pattern innerPattern = Pattern.compile(vhlp.pattern());
 				Matcher innerMatcher = innerPattern.matcher(line);
 				
-				//List<String> groupNames = RegexHelper.getRegexNamedGroups(usageLine.pattern());
-				System.err.println("Inner Pattern:" + innerPattern.pattern());
-				List<String> groupNames = RegexHelper.getRegexNamedGroups(innerPattern.pattern());
-				Iterator<String> groupNamesIterator = groupNames.iterator();
-				while(groupNamesIterator.hasNext())
+				if(innerMatcher.find() && innerMatcher.groupCount() >= 2)
 				{
-					String fieldName = groupNamesIterator.next();
-					if(fieldName.equals("VHostDirective")) continue;
-					try
+					List<String> groupNames = RegexHelper.getRegexNamedGroups(innerPattern.pattern());
+					Iterator<String> groupNamesIterator = groupNames.iterator();
+					while(groupNamesIterator.hasNext())
 					{
-						System.err.println("FieldName:" + fieldName);
-						field = instance.getClass().getField(fieldName);
-						instance.getClass().getField(fieldName).set(instance, innerMatcher.group(fieldName));
+						String fieldName = groupNamesIterator.next();
+						if(fieldName.equals("VHostDirective")) continue;
+						try
+						{
+							field = instance.getClass().getField(fieldName);
+							instance.getClass().getField(fieldName).set(instance, innerMatcher.group(fieldName));
+						}
+						catch(NoSuchFieldException ex) {}
 					}
-					catch(NoSuchFieldException ex) {}
 				}
 			}
 			return instance;
