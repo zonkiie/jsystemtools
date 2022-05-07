@@ -128,7 +128,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 				VHostLinePattern vhlp = instance.getClass().getAnnotation(VHostLinePattern.class);
 				Pattern innerPattern = Pattern.compile(vhlp.pattern());
 				Matcher innerMatcher = innerPattern.matcher(line);
-				System.err.println("InnerPattern:" + innerPattern.pattern());
+				//System.err.println("InnerPattern:" + innerPattern.pattern());
 				
 				if(innerMatcher.find() && innerMatcher.groupCount() >= 2)
 				{
@@ -140,7 +140,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 						if(fieldName.equals("VHostDirective")) continue;
 						try
 						{
-							System.err.println("FieldName:" + fieldName);
+							//System.err.println("FieldName:" + fieldName);
 							field = instance.getClass().getField(fieldName);
 							instance.getClass().getField(fieldName).set(instance, innerMatcher.group(fieldName));
 						}
