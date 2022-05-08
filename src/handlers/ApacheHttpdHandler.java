@@ -122,20 +122,18 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			scanner.close();*/
 			ApacheVHostName instance = null;
 			//Pattern usageLine = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)\\s+(?<VHostName>[\\w\\.\\-]+)\\s+(?<DocumentRoot>[\\w\\.\\-\\/]+)\\s?(?<RedirectType>\\w+)?");
-			Pattern usageLine = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)");
-			Matcher matcher = usageLine.matcher(line);
+			Matcher matcher = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)").matcher(line);
 			
 			if(matcher.find() && matcher.groupCount() >= 1)
 			{
 				instance = (ApacheVHostName) Class.forName("entities." + matcher.group("VHostDirective")).getDeclaredConstructor().newInstance();
 				VHostLinePattern vhlp = instance.getClass().getAnnotation(VHostLinePattern.class);
-				Pattern innerPattern = Pattern.compile(vhlp.pattern());
-				Matcher innerMatcher = innerPattern.matcher(line);
+				Matcher innerMatcher = Pattern.compile(vhlp.pattern()).matcher(line);
 				//System.err.println("InnerPattern:" + innerPattern.pattern());
 				
 				if(innerMatcher.find() && innerMatcher.groupCount() >= 2)
 				{
-					List<String> groupNames = RegexHelper.getRegexNamedGroups(innerPattern.pattern());
+					List<String> groupNames = RegexHelper.getRegexNamedGroups(innerMatcher.pattern().pattern());
 					Iterator<String> groupNamesIterator = groupNames.iterator();
 					while(groupNamesIterator.hasNext())
 					{
@@ -161,8 +159,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		List<String> lines = loadVHostFileLines();
 		for(String line: lines)
 		{
-			Pattern usageLine = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)\\s+(?<VHostName>[\\w\\.\\-]+)");
-			Matcher matcher = usageLine.matcher(line);
+			Matcher matcher = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)\\s+(?<VHostName>[\\w\\.\\-]+)").matcher(line);
 			
 			if(matcher.find() && matcher.groupCount() >= 2)
 			{
