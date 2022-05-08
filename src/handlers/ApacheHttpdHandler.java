@@ -125,8 +125,6 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			Pattern usageLine = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)");
 			Matcher matcher = usageLine.matcher(line);
 			
-			Field field;
-			
 			if(matcher.find() && matcher.groupCount() >= 1)
 			{
 				instance = (ApacheVHostName) Class.forName("entities." + matcher.group("VHostDirective")).getDeclaredConstructor().newInstance();
