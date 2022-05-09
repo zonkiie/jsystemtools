@@ -59,6 +59,10 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 				Object result = parseLine(line);
 				System.out.println(ToStringBuilder.reflectionToString(result));
 			}
+			{
+				String line = getLineEntryForVHostName("www.example.com");
+				System.out.println(line);
+			}
 			
 		}
 		catch(Exception ex)
@@ -169,14 +173,15 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return null;
 	}
 	
-	private String getVhostEntry(ApacheVHostName o) throws IOException
+	private ApacheVHostName getVhostEntry(ApacheVHostName vhost) throws IOException
 	{
-		List<ApacheVHostName> vhlist = loadAndParseVHostFile();
-		for(ApacheVHostName entry: vhlist)
-		{
-			
-		}
-		return null;
+		return getVhostEntry(vhost.VHostName);
+	}
+	
+	private ApacheVHostName getVhostEntry(String vhostName) throws IOException
+	{
+		String line = getLineEntryForVHostName(vhostName);
+		return parseLine(line);
 	}
 	
 	private String setLineEntryForVHost(ApacheVHostName o)
