@@ -6,4 +6,9 @@ import interfaces.*;
 public class ApacheVHost extends ApacheVHostName
 {
 	public String DocumentRoot;
+	
+	public String toDirective()
+	{
+		return super.toDirective() + " \"" + DocumentRoot + "\"";
+	}
 }

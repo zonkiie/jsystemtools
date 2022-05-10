@@ -6,4 +6,9 @@ import interfaces.*;
 public class ApacheVHostSSL extends ApacheVHost
 {
 	public String CertificatePath;
+
+	public String toDirective()
+	{
+		return super.toDirective() + " \"" + CertificatePath + "\"";
+	}
 }

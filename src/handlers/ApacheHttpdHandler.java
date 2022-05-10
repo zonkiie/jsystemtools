@@ -60,6 +60,12 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 				System.out.println(ToStringBuilder.reflectionToString(result));
 			}
 			{
+				String line = "Use ApacheRedirect www2.example.com http://www.google.de 301";
+				ApacheVHostName result = parseLine(line);
+				System.out.println(ToStringBuilder.reflectionToString(result));
+				System.out.println("Directive rebuilt:" + result.toDirective());
+			}
+			{
 				String line = getLineEntryForVHostName("www.example.com");
 				System.out.println(line);
 			}

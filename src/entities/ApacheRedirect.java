@@ -7,4 +7,9 @@ public class ApacheRedirect extends ApacheVHostName
 {
 	public String RedirectTarget;
 	public String RedirectType;
+	
+	public String toDirective()
+	{
+		return super.toDirective() + " \"" + RedirectTarget + "\" " + RedirectType;
+	}
 }

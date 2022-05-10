@@ -6,4 +6,9 @@ import interfaces.*;
 public class ApacheRedirectSSL extends ApacheRedirect
 {
 	public String CertificatePath;
+	
+	public String toDirective()
+	{
+		return super.toDirective() + " \"" + CertificatePath + "\"";
+	}
 }
