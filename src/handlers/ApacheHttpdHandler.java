@@ -69,6 +69,13 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 				String line = getLineEntryForVHostName("www.example.com");
 				System.out.println(line);
 			}
+			{
+				ApacheVHostSSL entry = new ApacheVHostSSL();
+				entry.VHostName = "support.example.com";
+				entry.DocumentRoot = "/home/example/support/";
+				entry.CertificatePath = "/etc/apache2/certificates/support.example.com.cert";
+				add(entry);
+			}
 			
 		}
 		catch(Exception ex)
@@ -207,6 +214,18 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 
 	public CRUDLS<ApacheVHostName> add(ApacheVHostName o)
 	{
+		try
+		{
+			//ApacheVHostName entry = (ApacheVHostName) Class.forName("entities." + o.getClass().getSimpleName());
+			BufferedWriter writer = new BufferedWriter(new FileWriter(this.VHostFile, true));
+			writer.write(o.toDirective() + "\n");
+			writer.close();
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			System.err.println(ex.getMessage());
+		}
 		return this;
 	}
 	

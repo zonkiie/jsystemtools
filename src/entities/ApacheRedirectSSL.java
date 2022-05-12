@@ -7,7 +7,7 @@ public class ApacheRedirectSSL extends ApacheRedirect
 {
 	public String CertificatePath;
 	
-	public String toDirective()
+	public String toDirective() throws javax.naming.NamingException
 	{
 		return super.toDirective() + " \"" + CertificatePath + "\"";
 	}

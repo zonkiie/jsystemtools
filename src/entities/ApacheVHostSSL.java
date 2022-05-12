@@ -7,7 +7,7 @@ public class ApacheVHostSSL extends ApacheVHost
 {
 	public String CertificatePath;
 
-	public String toDirective()
+	public String toDirective() throws javax.naming.NamingException
 	{
 		return super.toDirective() + " \"" + CertificatePath + "\"";
 	}

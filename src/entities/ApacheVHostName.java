@@ -6,9 +6,10 @@ public abstract class ApacheVHostName
 {
 	public String VHostName;
 	
-	public String toDirective()
+	public String toDirective() throws javax.naming.NamingException
 	{
-		return "Use " + this.getClass().getSimpleName() + " \"" + VHostName + "\"";
+		if(getClass().getSimpleName().equals("")) throw new javax.naming.NamingException("Cannot determine class!");
+		return "Use " + getClass().getSimpleName() + " \"" + VHostName + "\"";
 	}
 }
 

@@ -7,7 +7,7 @@ public class ApacheVHost extends ApacheVHostName
 {
 	public String DocumentRoot;
 	
-	public String toDirective()
+	public String toDirective() throws javax.naming.NamingException
 	{
 		return super.toDirective() + " \"" + DocumentRoot + "\"";
 	}
