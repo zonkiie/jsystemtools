@@ -197,9 +197,10 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return parseLine(line);
 	}
 	
-	private String setLineEntryForVHost(ApacheVHostName o)
+	private CRUDLS<ApacheVHostName> setLineEntryForVHost(ApacheVHostName o)
 	{
-		return null;
+		
+		return this;
 	}
 
 	private Class getVhostClass(ApacheVHostName o)
@@ -234,14 +235,40 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return this;
 	}
 	
-	public ApacheVHostName get(ApacheVHostName o)
+	public ApacheVHostName get(String vhostName)
 	{
-		return new ApacheVHost();
+		try
+		{
+			return parseLine(getLineEntryForVHostName(vhostName));
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	public ApacheVHostName get(ApacheVHostName vhost)
+	{
+		return get(vhost.VHostName);
+		//return new ApacheVHost();
 	}
 
 	public List<ApacheVHostName> list()
 	{
-		return new Vector<ApacheVHostName>();
+		try
+		{
+			BufferedReader reader = new BufferedReader(new FileReader(VHostFile));
+			List<ApacheVHostName> lines = new Vector<ApacheVHostName>();
+			String line = null;
+			while((line = reader.readLine()) != null) lines.add(parseLine(line));
+			return lines;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 	
 	public List<ApacheVHostName> search(ApacheVHostName o)
