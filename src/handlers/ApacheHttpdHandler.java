@@ -224,6 +224,11 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return this;
 	}
 	
+	public CRUDLS<ApacheVHostName> add(List<ApacheVHostName> o)
+	{
+		return this;
+	}
+	
 	public CRUDLS<ApacheVHostName> set(ApacheVHostName o)
 	{
 		try
@@ -256,6 +261,11 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			ex.printStackTrace();
 			return null;
 		}
+	}
+	
+	public CRUDLS<ApacheVHostName> set(List<ApacheVHostName> o)
+	{
+		return this;
 	}
 	
 	public ApacheVHostName get(String vhostName)
@@ -300,6 +310,16 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 	}
 
 	public CRUDLS<ApacheVHostName> delete(ApacheVHostName vhn)
+	{
+		return this;
+	}
+	
+	public CRUDLS<ApacheVHostName> delete(String vhn)
+	{
+		return this;
+	}
+	
+	public CRUDLS<ApacheVHostName> delete(List<ApacheVHostName> vhn)
 	{
 		return this;
 	}
