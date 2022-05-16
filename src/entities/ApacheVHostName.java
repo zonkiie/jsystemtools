@@ -2,6 +2,7 @@ package entities;
 
 import interfaces.*;
 
+@VHostLinePattern(pattern = "^\\s*Use\\s+(?<VHostDirective>\\w+)\\s+(?<VHostName>[\\w\\.\\-]+)")
 public abstract class ApacheVHostName
 {
 	public String VHostName;

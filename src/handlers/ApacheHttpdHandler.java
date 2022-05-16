@@ -139,7 +139,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			scanner.close();*/
 			ApacheVHostName instance = null;
 			//Pattern usageLine = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)\\s+(?<VHostName>[\\w\\.\\-]+)\\s+(?<DocumentRoot>[\\w\\.\\-\\/]+)\\s?(?<RedirectType>\\w+)?");
-			Matcher matcher = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)").matcher(line);
+			Matcher matcher = Pattern.compile("^\\s*Use\\s+(?<VHostDirective>\\w+)").matcher(line);
 			
 			if(matcher.find() && matcher.groupCount() >= 1)
 			{
@@ -174,9 +174,10 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 	private String getLineEntryForVHostName(String vhostName) throws IOException
 	{
 		List<String> lines = loadVHostFileLines();
+		String vhpattern = ApacheVHostName.class.getAnnotation(VHostLinePattern.class).pattern();
 		for(String line: lines)
 		{
-			Matcher matcher = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)\\s+(?<VHostName>[\\w\\.\\-]+)").matcher(line);
+			Matcher matcher = Pattern.compile(vhpattern).matcher(line);
 			
 			if(matcher.find() && matcher.groupCount() >= 2)
 			{
@@ -234,12 +235,13 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		try
 		{
 			List<String> lines = loadVHostFileLines();
+			String vhpattern = ApacheVHostName.class.getAnnotation(VHostLinePattern.class).pattern();
 			StringBuffer str = new StringBuffer("");
 			//for(String line: lines)
 			for(int i = 0; i < lines.size(); i++)
 			{
 				String line = lines.get(i);
-				Matcher matcher = Pattern.compile("Use\\s+(?<VHostDirective>\\w+)\\s+(?<VHostName>[\\w\\.\\-]+)").matcher(line);
+				Matcher matcher = Pattern.compile(vhpattern).matcher(line);
 				
 				if(matcher.find() && matcher.groupCount() >= 2)
 				{
@@ -263,7 +265,44 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		}
 	}
 	
-	public CRUDLS<ApacheVHostName> set(List<ApacheVHostName> o)
+	public CRUDLS<ApacheVHostName> set(List<ApacheVHostName> vhlist)
+	{
+		try
+		{
+			List<String> lines = loadVHostFileLines();
+			String vhpattern = ApacheVHostName.class.getAnnotation(VHostLinePattern.class).pattern();
+			StringBuffer str = new StringBuffer("");
+			
+			for(int i = 0; i < lines.size(); i++)
+			{
+				String line = lines.get(i);
+				Matcher matcher = Pattern.compile(vhpattern).matcher(line);
+				if(matcher.find() && matcher.groupCount() >= 2)
+				{
+					for(ApacheVHostName entry: vhlist)
+					{
+						if(matcher.group("VHostName").equals(entry.VHostName))
+						{
+							String newLine = entry.toDirective();
+							lines.set(i, newLine);
+						}
+					}
+				}
+			}
+			for(String line: lines) str.append(line).append("\n");
+			BufferedWriter writer = new BufferedWriter(new FileWriter(this.VHostFile));
+			writer.write(str.toString());
+			writer.close();
+			return this;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	public CRUDLS<ApacheVHostName> rename(String oldName, String newName)
 	{
 		return this;
 	}
