@@ -10,7 +10,7 @@ import org.apache.commons.cli.*;
 
 public class MainProgram
 {
-	private static List<Class> ModuleList = List.of(ApacheHttpdHandler.class);
+	private static List<Class> ModuleList = List.of(ApacheHttpdHandler.class, utils.ClassInheritance.class);
 	
 	public static String ls(String dir) throws Exception
 	{
