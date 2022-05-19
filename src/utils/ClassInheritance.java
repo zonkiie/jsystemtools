@@ -25,7 +25,7 @@ public class ClassInheritance implements Handler
 		}
 		return cl;
 	}
-
+	
 	public List<Class> getClassTree(Object object)
 	{
 		return getClassTree(object.getClass());

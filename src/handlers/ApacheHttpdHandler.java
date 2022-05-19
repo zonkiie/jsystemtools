@@ -122,6 +122,18 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		while((line = reader.readLine()) != null) lines.add(parseLine(line));
 		return lines;
 	}
+	
+	private String getVHostLinePattern(Class clazz)
+	{
+		List<Class> inheritanceList = (new ClassInheritance()).getClassTree(clazz);
+		String attrString = "";
+		for(int i = inheritanceList.size() - 1; i>=0; i--)
+		{
+			VHostLinePattern vhlp = inheritanceList.get(i).getDeclaredAnnotation(VHostLinePattern.class).pattern();
+			//attrString += inheritanceList.get(i).getDeclaredAnnotation(VHostLinePattern.class)).pattern() + (i > 1?"\\s+":"");
+		}
+		return attrString;
+	}
 
 	public ApacheVHostName parseLine(String line) 
 	{
