@@ -126,10 +126,15 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 	private String getVHostLinePattern(Class clazz)
 	{
 		List<Class> inheritanceList = (new ClassInheritance()).getClassTree(clazz);
+		Collections.reverse(inheritanceList);
 		String attrString = "";
-		for(int i = inheritanceList.size() - 1; i>=0; i--)
+		for(Class singleClazz: inheritanceList)
 		{
-			VHostLinePattern vhlp = inheritanceList.get(i).getDeclaredAnnotation(VHostLinePattern.class).pattern();
+			System.err.println("Class:" + singleClazz);
+			java.lang.annotation.Annotation an = singleClazz.getAnnotation(VHostLinePattern.class);
+			System.err.println("Annotation:" + an);
+			//VHostLinePattern vhlp = singleClazz.getAnnotation(VHostLinePattern.class);
+			//VHostLinePattern vhlp = inheritanceList.get(i).getAnnotation(VHostLinePattern.class);
 			//attrString += inheritanceList.get(i).getDeclaredAnnotation(VHostLinePattern.class)).pattern() + (i > 1?"\\s+":"");
 		}
 		return attrString;
@@ -157,6 +162,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			{
 				instance = (ApacheVHostName) Class.forName("entities." + matcher.group("VHostDirective")).getDeclaredConstructor().newInstance();
 				VHostLinePattern vhlp = instance.getClass().getAnnotation(VHostLinePattern.class);
+				String vp = getVHostLinePattern(instance.getClass());
 				Matcher innerMatcher = Pattern.compile(vhlp.pattern()).matcher(line);
 				//System.err.println("InnerPattern:" + innerPattern.pattern());
 				
