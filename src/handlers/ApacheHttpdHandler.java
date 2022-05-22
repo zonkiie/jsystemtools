@@ -125,6 +125,10 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 					}
 				}
 			}
+			else
+			{
+				System.err.println("No match found!");
+			}
 			return instance;
 		}
 		//catch(ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchFieldException ex)
@@ -282,7 +286,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			for(String line: lines)
 			{
 				ApacheVHostName entry = parseLine(line);
-				if(entry.VHostName.equals(oldName))
+				if(entry.VHostName != null && entry.VHostName.equals(oldName))
 				{
 					entry.VHostName = newName;
 					line = entry.toDirective() + "\n";
@@ -308,7 +312,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			for(String line: lines)
 			{
 				ApacheVHostName entry = parseLine(line);
-				if(entry.VHostName.equals(oldObject.VHostName) && entry.getClass().getName().equals(oldObject.getClass().getName()))
+				if(entry.VHostName != null && entry.VHostName.equals(oldObject.VHostName) && entry.getClass().getName().equals(oldObject.getClass().getName()))
 				{
 					line = renamedObject.toDirective() + "\n";
 				}
@@ -345,7 +349,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			for(String line: lines)
 			{
 				ApacheVHostName entry = parseLine(line);
-				if(entry.VHostName.equals(vhost.VHostName) && entry.getClass().getName().equals(vhost.getClass().getName())) return entry;
+				if(entry.VHostName != null && entry.VHostName.equals(vhost.VHostName) && entry.getClass().getName().equals(vhost.getClass().getName())) return entry;
 			}
 			// not found
 			return null;
@@ -388,7 +392,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			for(String line: lines)
 			{
 				ApacheVHostName entry = parseLine(line);
-				if(entry.VHostName.equals(vhn.VHostName) && entry.getClass().getName().equals(vhn.getClass().getName())) continue;
+				if(entry.VHostName != null && entry.VHostName.equals(vhn.VHostName) && entry.getClass().getName().equals(vhn.getClass().getName())) continue;
 				writer.write(line);
 			}
 			writer.close();
@@ -410,7 +414,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			for(String line: lines)
 			{
 				ApacheVHostName entry = parseLine(line);
-				if(entry.VHostName.equals(vhn)) continue;
+				if(entry.VHostName != null && entry.VHostName.equals(vhn)) continue;
 				writer.write(line);
 			}
 			writer.close();
@@ -434,7 +438,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 				ApacheVHostName entry = parseLine(line);
 				boolean found = false;
 				for(ApacheVHostName gentry: vhostList) {
-					if(entry.VHostName.equals(gentry.VHostName) && entry.getClass().getName().equals(gentry.getClass().getName())) found = true;
+					if(entry.VHostName != null && entry.VHostName.equals(gentry.VHostName) && entry.getClass().getName().equals(gentry.getClass().getName())) found = true;
 				}
 				if(found) continue;
 				writer.write(line);
