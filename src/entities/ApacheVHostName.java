@@ -10,7 +10,7 @@ public abstract class ApacheVHostName
 	public String toDirective() throws javax.naming.NamingException
 	{
 		if(getClass().getSimpleName().equals("")) throw new javax.naming.NamingException("Cannot determine class!");
-		return "Use " + getClass().getSimpleName() + " \"" + VHostName + "\"";
+		return "Use " + getClass().getSimpleName() + " " + VHostName + "";
 	}
 }
 

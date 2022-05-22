@@ -48,12 +48,28 @@ public class TestApacheHttpdHandler
 				String line = httpdhandler.getLineEntryForVHostName("www.example.com");
 				System.out.println(line);
 			}
+			System.out.println("Now editing support.example.com...");
 			{
 				ApacheVHostSSL entry = new ApacheVHostSSL();
 				entry.VHostName = "support.example.com";
 				entry.DocumentRoot = "/home/example/support/";
 				entry.CertificatePath = "/etc/apache2/certificates/support.example.com.cert";
 				httpdhandler.add(entry);
+			}
+			{
+				String line = httpdhandler.getLineEntryForVHostName("support.example.com");
+				System.out.println(line);
+			}
+			{
+				ApacheVHostSSL entry = new ApacheVHostSSL();
+				entry.VHostName = "support.example.com";
+				entry.DocumentRoot = "/home/example/support2/";
+				entry.CertificatePath = "/etc/apache2/certificates/support.example.com.cert2";
+				httpdhandler.set(entry);
+			}
+			{
+				String line = httpdhandler.getLineEntryForVHostName("support.example.com");
+				System.out.println(line);
 			}
 			
 		}

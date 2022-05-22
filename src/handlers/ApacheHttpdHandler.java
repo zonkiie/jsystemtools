@@ -190,8 +190,19 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return this;
 	}
 	
-	public CRUDLS<ApacheVHostName> add(List<ApacheVHostName> o)
+	public CRUDLS<ApacheVHostName> add(List<ApacheVHostName> vhostList)
 	{
+		try
+		{
+			BufferedWriter writer = new BufferedWriter(new FileWriter(this.VHostFile, true));
+			for(ApacheVHostName entry: vhostList) writer.write(entry.toDirective() + "\n");
+			writer.close();
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			System.err.println(ex.getMessage());
+		}
 		return this;
 	}
 	
@@ -287,8 +298,22 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 	
 	public ApacheVHostName get(ApacheVHostName vhost)
 	{
-		return get(vhost.VHostName);
-		//return new ApacheVHost();
+		try
+		{
+			List<String> lines = loadVHostFileLines();
+			for(String line: lines)
+			{
+				ApacheVHostName entry = parseLine(line);
+				if(entry.VHostName.equals(vhost.VHostName) && entry.getClass().getName().equals(vhost.getClass().getName())) return entry;
+			}
+			// not found
+			return null;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 
 	public List<ApacheVHostName> list()
@@ -315,17 +340,59 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 
 	public CRUDLS<ApacheVHostName> delete(ApacheVHostName vhn)
 	{
-		return this;
+		try
+		{
+			List<String> lines = loadVHostFileLines();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(getVHostFile()));
+			for(String line: lines)
+			{
+				ApacheVHostName entry = parseLine(line);
+				if(entry.VHostName.equals(vhn.VHostName) && entry.getClass().getName().equals(vhn.getClass().getName())) continue;
+				writer.write(line);
+			}
+			writer.close();
+			return this;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 	
 	public CRUDLS<ApacheVHostName> delete(String vhn)
 	{
-		return this;
+		try
+		{
+			List<String> lines = loadVHostFileLines();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(getVHostFile()));
+			for(String line: lines)
+			{
+				ApacheVHostName entry = parseLine(line);
+				if(entry.VHostName.equals(vhn)) continue;
+				writer.write(line);
+			}
+			writer.close();
+			return this;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 	
 	public CRUDLS<ApacheVHostName> delete(List<ApacheVHostName> vhn)
 	{
-		return this;
+		try
+		{
+			return this;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 }
 
