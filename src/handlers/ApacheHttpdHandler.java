@@ -168,11 +168,6 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return null;
 	}
 
-	public CRUDLS<ApacheVHostName> convert(ApacheVHostName o, Class clazz)
-	{
-		return this;
-	}
-
 	public CRUDLS<ApacheVHostName> add(ApacheVHostName o)
 	{
 		try
@@ -280,7 +275,53 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 	
 	public CRUDLS<ApacheVHostName> rename(String oldName, String newName)
 	{
-		return this;
+		try
+		{
+			List<String> lines = loadVHostFileLines();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(getVHostFile()));
+			for(String line: lines)
+			{
+				ApacheVHostName entry = parseLine(line);
+				if(entry.VHostName.equals(oldName))
+				{
+					entry.VHostName = newName;
+					line = entry.toDirective() + "\n";
+				}
+				writer.write(line);
+			}
+			writer.close();
+			return this;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	public CRUDLS<ApacheVHostName> rename(ApacheVHostName oldObject, ApacheVHostName renamedObject)
+	{
+		try
+		{
+			List<String> lines = loadVHostFileLines();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(getVHostFile()));
+			for(String line: lines)
+			{
+				ApacheVHostName entry = parseLine(line);
+				if(entry.VHostName.equals(oldObject.VHostName) && entry.getClass().getName().equals(oldObject.getClass().getName()))
+				{
+					line = renamedObject.toDirective() + "\n";
+				}
+				writer.write(line);
+			}
+			writer.close();
+			return this;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 	
 	public ApacheVHostName get(String vhostName)
@@ -382,10 +423,23 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		}
 	}
 	
-	public CRUDLS<ApacheVHostName> delete(List<ApacheVHostName> vhn)
+	public CRUDLS<ApacheVHostName> delete(List<ApacheVHostName> vhostList)
 	{
 		try
 		{
+			List<String> lines = loadVHostFileLines();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(getVHostFile()));
+			for(String line: lines)
+			{
+				ApacheVHostName entry = parseLine(line);
+				boolean found = false;
+				for(ApacheVHostName gentry: vhostList) {
+					if(entry.VHostName.equals(gentry.VHostName) && entry.getClass().getName().equals(gentry.getClass().getName())) found = true;
+				}
+				if(found) continue;
+				writer.write(line);
+			}
+			writer.close();
 			return this;
 		}
 		catch(Exception ex)

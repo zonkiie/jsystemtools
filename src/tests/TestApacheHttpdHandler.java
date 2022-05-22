@@ -71,6 +71,11 @@ public class TestApacheHttpdHandler
 				String line = httpdhandler.getLineEntryForVHostName("support.example.com");
 				System.out.println(line);
 			}
+			{
+				httpdhandler.rename("support.example.com", "support2.example.com");
+				String line = httpdhandler.getLineEntryForVHostName("support2.example.com");
+				System.out.println(line);
+			}
 			
 		}
 		catch(Exception ex)
