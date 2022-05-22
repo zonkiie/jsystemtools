@@ -34,57 +34,6 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return "Hello " + str1 + ", " + str2;
 	}
 	
-	@PublicCallable
-	public String testHandler()
-	{
-		this.VHostFile = "/dev/shm/VhostFile.conf";
-		try
-		{
-			String str = "Use ApacheVHost www.example.com /home/example/htdocs\nUse ApacheRedirect www2.example.com http://www.google.de\n";
-			BufferedWriter writer = new BufferedWriter(new FileWriter(this.VHostFile));
-			writer.write(str);
-			writer.close();
-			{
-				String line = "Use ApacheVHost www.example.com /home/example/htdocs";
-				Object result = parseLine(line);
-				System.out.println(ToStringBuilder.reflectionToString(result));
-			}
-			{
-				String line = "Use ApacheVHost www.example.com \"/home/example/htdocs 1/bla bla\"";
-				Object result = parseLine(line);
-				System.out.println(ToStringBuilder.reflectionToString(result));
-			}
-			{
-				String line = "Use ApacheRedirect www2.example.com http://www.google.de 301";
-				Object result = parseLine(line);
-				System.out.println(ToStringBuilder.reflectionToString(result));
-			}
-			{
-				String line = "Use ApacheRedirect www2.example.com http://www.google.de 301";
-				ApacheVHostName result = parseLine(line);
-				System.out.println(ToStringBuilder.reflectionToString(result));
-				System.out.println("Directive rebuilt:" + result.toDirective());
-			}
-			{
-				String line = getLineEntryForVHostName("www.example.com");
-				System.out.println(line);
-			}
-			{
-				ApacheVHostSSL entry = new ApacheVHostSSL();
-				entry.VHostName = "support.example.com";
-				entry.DocumentRoot = "/home/example/support/";
-				entry.CertificatePath = "/etc/apache2/certificates/support.example.com.cert";
-				add(entry);
-			}
-			
-		}
-		catch(Exception ex)
-		{
-			System.err.println("Exception " + ex.getMessage());
-		}
-		return null;
-	}
-	
 	public String getVHostFile()
 	{
 		return VHostFile;
@@ -123,7 +72,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return lines;
 	}
 	
-	private String getVHostLinePattern(Class clazz)
+	public String getVHostLinePattern(Class clazz)
 	{
 		List<Class> inheritanceList = (new ClassInheritance()).getClassTree(clazz);
 		Collections.reverse(inheritanceList);
@@ -187,7 +136,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		}
 	}
 	
-	private String getLineEntryForVHostName(String vhostName) throws IOException
+	public String getLineEntryForVHostName(String vhostName) throws IOException
 	{
 		List<String> lines = loadVHostFileLines();
 		String vhpattern = ApacheVHostName.class.getAnnotation(VHostLinePattern.class).pattern();
@@ -203,12 +152,12 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return null;
 	}
 	
-	private ApacheVHostName getVhostEntry(ApacheVHostName vhost) throws IOException
+	public ApacheVHostName getVhostEntry(ApacheVHostName vhost) throws IOException
 	{
 		return getVhostEntry(vhost.VHostName);
 	}
 	
-	private ApacheVHostName getVhostEntry(String vhostName) throws IOException
+	public ApacheVHostName getVhostEntry(String vhostName) throws IOException
 	{
 		String line = getLineEntryForVHostName(vhostName);
 		return parseLine(line);
