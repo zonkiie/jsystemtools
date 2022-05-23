@@ -175,7 +175,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 	
 	private Class getVhostClass(ApacheVHostName o)
 	{
-		return null;
+		return o.getClass();
 	}
 
 	public CRUDLS<ApacheVHostName> add(ApacheVHostName o)
@@ -389,7 +389,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		return new Vector<ApacheVHostName>();
 	}
 
-	public CRUDLS<ApacheVHostName> delete(ApacheVHostName vhn)
+	public CRUDLS<ApacheVHostName> delete(String vhn)
 	{
 		try
 		{
@@ -398,7 +398,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			for(String line: lines)
 			{
 				ApacheVHostName entry = parseLine(line);
-				if(entry.VHostName != null && entry.VHostName.equals(vhn.VHostName) && entry.getClass().getName().equals(vhn.getClass().getName())) continue;
+				if(entry.VHostName != null && entry.VHostName.equals(vhn)) continue;
 				writer.write(line + "\n");
 			}
 			writer.close();
@@ -411,7 +411,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 		}
 	}
 	
-	public CRUDLS<ApacheVHostName> delete(String vhn)
+	public CRUDLS<ApacheVHostName> delete(ApacheVHostName vhn)
 	{
 		try
 		{
@@ -420,7 +420,7 @@ public class ApacheHttpdHandler implements CRUDLS<ApacheVHostName>, Handler
 			for(String line: lines)
 			{
 				ApacheVHostName entry = parseLine(line);
-				if(entry.VHostName != null && entry.VHostName.equals(vhn)) continue;
+				if(entry.VHostName != null && entry.VHostName.equals(vhn.VHostName) && entry.getClass().getName().equals(vhn.getClass().getName())) continue;
 				writer.write(line + "\n");
 			}
 			writer.close();
