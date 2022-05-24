@@ -13,6 +13,12 @@ import org.apache.commons.lang3.builder.*;
 public class TestApacheHttpdHandler
 {
 	@PublicCallable
+	public String info()
+	{
+		return "Test Handles HTTP Configuration";
+	}
+	
+	@PublicCallable
 	public String testHandler()
 	{
 		ApacheHttpdHandler httpdhandler = new ApacheHttpdHandler();
