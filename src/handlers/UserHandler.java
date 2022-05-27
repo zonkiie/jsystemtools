@@ -1,5 +1,7 @@
 package handlers;
 
-public class UserHandler
+import interfaces.*;
+
+public class UserHandler implements CRUDLS<LinuxUser>, Handler
 {
 }
