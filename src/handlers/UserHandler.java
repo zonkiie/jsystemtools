@@ -1,7 +1,14 @@
 package handlers;
 
 import interfaces.*;
+import entities.*;
 
-public class UserHandler implements CRUDLS<LinuxUser>, Handler
+@PublicCallable
+public class UserHandler implements /*CRUDLS<UnixPasswd>, */ Handler
 {
+	@PublicCallable
+	public String info()
+	{
+		return "Handles User Management";
+	}
 }

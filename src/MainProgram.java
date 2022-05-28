@@ -10,7 +10,8 @@ import org.apache.commons.cli.*;
 
 public class MainProgram
 {
-	private static List<Class> ModuleList = List.of(ApacheHttpdHandler.class, utils.ClassInheritance.class);
+	private final static String BLACK = "\033[0;30m", BLACK_BOLD = "\33[1;30m", RED = "\033[0;31m", RESET = "\033[0m";
+	private static List<Class> ModuleList = List.of(ApacheHttpdHandler.class, utils.ClassInheritance.class, UserHandler.class);
 	
 	public static String ls(String dir) throws Exception
 	{
@@ -70,8 +71,7 @@ public class MainProgram
 					{
 						// Former Code: Handler h = (Handler)c.newInstance();
 						Handler h = (Handler)c.getDeclaredConstructor().newInstance();
-						System.out.println(c.getName());
-						System.out.println(h.info());
+						System.out.format("%s%-35s: %s%s\n", RED, c.getName(), RESET, h.info());
 					}
 					System.out.println("Note: Use Canoncal Name including Package Name for a call! Otherwise a Class/Module cannot be found!");
 					System.exit(0);
