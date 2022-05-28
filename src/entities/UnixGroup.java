@@ -1,5 +1,5 @@
 package entities;
 
-public class LinuxUser
+public class UnixGroup
 {
 }
