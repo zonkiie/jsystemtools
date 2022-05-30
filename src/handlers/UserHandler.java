@@ -6,12 +6,75 @@ import java.lang.*;
 import java.util.*;
 
 @PublicCallable
-public class UserHandler implements /*CRUDLS<UnixPasswd>, */ Handler
+public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 {
+	public String homeBaseDir = "/home";
 	@PublicCallable
 	public String info()
 	{
 		return "Handles User Management";
+	}
+	
+	public CRUDLS<UnixPasswd> add(UnixPasswd o)
+	{
+		return null;
+	}
+	
+	public CRUDLS<UnixPasswd> add(List<UnixPasswd> o)
+	{
+		return null;
+	}
+	
+	public CRUDLS<UnixPasswd> set(UnixPasswd o)
+	{
+		return null;
+	}
+	
+	public CRUDLS<UnixPasswd> set(List<UnixPasswd> o)
+	{
+		return null;
+	}
+	
+	public CRUDLS<UnixPasswd> rename(String from, String to)
+	{
+		try
+		{
+			ExecutorReturn executorReturn = SimpleExecutor.execute("usermod", "-d", homeBaseDir + "/" + to, "-l", to, from);
+			if(executorReturn.returnCode != 0) throw new Exception("Something failed! Return code:" + executorReturn.returnCode + ", Return String:" + executorReturn.toString());
+			return this;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	public CRUDLS<UnixPasswd> rename(UnixPasswd oldObject, UnixPasswd renamedObject)
+	{
+		return null;
+	}
+	
+	@PublicCallable
+	public UnixPasswd get(String id)
+	{
+		try
+		{
+			ExecutorReturn executorReturn = SimpleExecutor.execute("getent", "passwd", id);
+			if(executorReturn.returnCode != 0) throw new Exception("Something failed! Return code:" + executorReturn.returnCode);
+			UnixPasswd entry = parseLine(executorReturn.toString());
+			return entry;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	public UnixPasswd get(UnixPasswd o)
+	{
+		return null;
 	}
 	
 	@PublicCallable
@@ -22,8 +85,7 @@ public class UserHandler implements /*CRUDLS<UnixPasswd>, */ Handler
 			List<UnixPasswd> entryList = new ArrayList<UnixPasswd>();
 			ExecutorReturn executorReturn = SimpleExecutor.execute("getent", "passwd");
 			if(executorReturn.returnCode != 0) throw new Exception("Something failed! Return code:" + executorReturn.returnCode);
-			String [] lines = executorReturn.toString().split("\\R");
-			for(String line: lines) entryList.add(parseLine(line));
+			for(String line: executorReturn.toString().split("\\R")) entryList.add(parseLine(line));
 			return entryList;
 		}
 		catch(Exception ex)
@@ -31,6 +93,26 @@ public class UserHandler implements /*CRUDLS<UnixPasswd>, */ Handler
 			ex.printStackTrace();
 			return null;
 		}
+	}
+	
+	public List<UnixPasswd> search(UnixPasswd o)
+	{
+		return null;
+	}
+	
+	public CRUDLS<UnixPasswd> delete(UnixPasswd o)
+	{
+		return null;
+	}
+	
+	public CRUDLS<UnixPasswd> delete(List<UnixPasswd> o)
+	{
+		return null;
+	}
+	
+	public CRUDLS<UnixPasswd> delete(String id)
+	{
+		return null;
 	}
 	
 	public UnixPasswd parseLine(String line)
