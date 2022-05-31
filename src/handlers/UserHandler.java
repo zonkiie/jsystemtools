@@ -27,7 +27,46 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	
 	public CRUDLS<UnixPasswd> set(UnixPasswd o)
 	{
-		return null;
+		
+		try
+		{
+			List<String> Params = new ArrayList<String>(){{add("usermod");}};
+			if(o.pw_dir != null)
+			{
+				Params.add("-d");
+				Params.add("-m");
+				Params.add(o.pw_dir);
+			}
+			if(o.pw_shell != null)
+			{
+				Params.add("-s");
+				Params.add(o.pw_shell);
+			}
+			if(o.pw_gecos != null)
+			{
+				Params.add("-c");
+				Params.add(o.pw_gecos);
+			}
+			if(o.pw_uid != null)
+			{
+				Params.add("-u");
+				Params.add(o.pw_uid.toString());
+			}
+			if(o.pw_gid != null)
+			{
+				Params.add("-g");
+				Params.add(o.pw_gid.toString());
+			}
+			String[] arrayParams = Params.toArray(new String[Params.size()]);
+			ExecutorReturn executorReturn = SimpleExecutor.execute(arrayParams);
+			if(executorReturn.returnCode != 0) throw new Exception(executorReturn.toString());
+			return this;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 	
 	public CRUDLS<UnixPasswd> set(List<UnixPasswd> o)
@@ -122,8 +161,8 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 		if(els.length != 7) return null; //Something failed. 7 Entries are nesessary.
 		entry.pw_name = els[0];
 		entry.pw_passwd = els[1];
-		entry.pw_uid = Integer.parseInt(els[2]);
-		entry.pw_gid = Integer.parseInt(els[3]);
+		entry.pw_uid = Integer.valueOf(els[2]);
+		entry.pw_gid = Integer.valueOf(els[3]);
 		entry.pw_gecos = els[4];
 		entry.pw_dir = els[5];
 		entry.pw_shell = els[6];
