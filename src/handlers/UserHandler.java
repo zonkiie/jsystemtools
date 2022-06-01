@@ -17,7 +17,46 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	
 	public CRUDLS<UnixPasswd> add(UnixPasswd o)
 	{
-		return null;
+		try
+		{
+			List<String> Params = new ArrayList<String>(){{add("useradd");}};
+			if(o.pw_dir != null)
+			{
+				Params.add("-d");
+				Params.add("-m");
+				Params.add(o.pw_dir);
+			}
+			if(o.pw_shell != null)
+			{
+				Params.add("-s");
+				Params.add(o.pw_shell);
+			}
+			if(o.pw_gecos != null)
+			{
+				Params.add("-c");
+				Params.add(o.pw_gecos);
+			}
+			if(o.pw_uid != null)
+			{
+				Params.add("-u");
+				Params.add(o.pw_uid.toString());
+			}
+			if(o.pw_gid != null)
+			{
+				Params.add("-g");
+				Params.add(o.pw_gid.toString());
+			}
+			Params.add(o.pw_name);
+			String[] arrayParams = Params.toArray(new String[Params.size()]);
+			ExecutorReturn executorReturn = SimpleExecutor.execute(arrayParams);
+			if(executorReturn.returnCode != 0) throw new Exception(executorReturn.toString());
+			return this;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 	
 	public CRUDLS<UnixPasswd> add(List<UnixPasswd> o)
@@ -27,7 +66,6 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	
 	public CRUDLS<UnixPasswd> set(UnixPasswd o)
 	{
-		
 		try
 		{
 			List<String> Params = new ArrayList<String>(){{add("usermod");}};
@@ -57,6 +95,7 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 				Params.add("-g");
 				Params.add(o.pw_gid.toString());
 			}
+			Params.add(o.pw_name);
 			String[] arrayParams = Params.toArray(new String[Params.size()]);
 			ExecutorReturn executorReturn = SimpleExecutor.execute(arrayParams);
 			if(executorReturn.returnCode != 0) throw new Exception(executorReturn.toString());
