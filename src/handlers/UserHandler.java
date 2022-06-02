@@ -19,11 +19,10 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	{
 		try
 		{
-			List<String> Params = new ArrayList<String>(){{add("useradd");}};
+			List<String> Params = new ArrayList<String>(){{add("useradd"); add("-m"); }};
 			if(o.pw_dir != null)
 			{
 				Params.add("-d");
-				Params.add("-m");
 				Params.add(o.pw_dir);
 			}
 			if(o.pw_shell != null)
@@ -61,7 +60,8 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	
 	public CRUDLS<UnixPasswd> add(List<UnixPasswd> o)
 	{
-		return null;
+		for(UnixPasswd entry: o) add(entry);
+		return this;
 	}
 	
 	public CRUDLS<UnixPasswd> set(UnixPasswd o)
@@ -71,8 +71,8 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 			List<String> Params = new ArrayList<String>(){{add("usermod");}};
 			if(o.pw_dir != null)
 			{
-				Params.add("-d");
 				Params.add("-m");
+				Params.add("-d");
 				Params.add(o.pw_dir);
 			}
 			if(o.pw_shell != null)
@@ -110,7 +110,8 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	
 	public CRUDLS<UnixPasswd> set(List<UnixPasswd> o)
 	{
-		return null;
+		for(UnixPasswd entry: o) set(entry);
+		return this;
 	}
 	
 	public CRUDLS<UnixPasswd> rename(String from, String to)
@@ -161,6 +162,7 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 		try
 		{
 			List<UnixPasswd> entryList = new ArrayList<UnixPasswd>();
+			// getent passwd because this lists also users which are not in /etc/passwd like nis(+), ldap, other naming services
 			ExecutorReturn executorReturn = SimpleExecutor.execute("getent", "passwd");
 			if(executorReturn.returnCode != 0) throw new Exception("Something failed! Return code:" + executorReturn.returnCode);
 			for(String line: executorReturn.toString().split("\\R")) entryList.add(parseLine(line));
@@ -175,7 +177,15 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	
 	public List<UnixPasswd> search(UnixPasswd o)
 	{
-		return null;
+		try
+		{
+			throw new Exception("Not implemented!");
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 	
 	public CRUDLS<UnixPasswd> delete(UnixPasswd o)
@@ -190,7 +200,17 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	
 	public CRUDLS<UnixPasswd> delete(String id)
 	{
-		return null;
+		try
+		{
+			ExecutorReturn executorReturn = SimpleExecutor.execute("userdel", "-r", id);
+			if(executorReturn.returnCode != 0) throw new Exception("Something failed! Return code:" + executorReturn.returnCode);
+			return this;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 	
 	public UnixPasswd parseLine(String line)
