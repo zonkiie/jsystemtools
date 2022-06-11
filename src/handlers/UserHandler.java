@@ -131,7 +131,16 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	
 	public CRUDLS<UnixPasswd> rename(UnixPasswd oldObject, UnixPasswd renamedObject)
 	{
-		return null;
+		try
+		{
+			rename(oldObject.pw_name, renameObject.pw_name);
+			return this;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 	
 	@PublicCallable
@@ -153,7 +162,7 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	
 	public UnixPasswd get(UnixPasswd o)
 	{
-		return null;
+		return get(o.pw_name);
 	}
 	
 	@PublicCallable
@@ -180,6 +189,12 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 		try
 		{
 			throw new Exception("Not implemented!");
+			List<UnixPasswd> entryList = new ArrayList<UnixPasswd>();;
+			for(UnixPasswd entry: list())
+			{
+				if(entry.pw_name.matches(".*" + Pattern.quote(o.pw_name) + ".*")) entryList.add(entry);
+			}
+			return entryList;
 		}
 		catch(Exception ex)
 		{
@@ -190,12 +205,14 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	
 	public CRUDLS<UnixPasswd> delete(UnixPasswd o)
 	{
-		return null;
+		delete(o.pw_name);
+		return this;
 	}
 	
-	public CRUDLS<UnixPasswd> delete(List<UnixPasswd> o)
+	public CRUDLS<UnixPasswd> delete(List<UnixPasswd> userList)
 	{
-		return null;
+		for(UnixPasswd entry: userList) delete(entry);
+		return this;
 	}
 	
 	public CRUDLS<UnixPasswd> delete(String id)
