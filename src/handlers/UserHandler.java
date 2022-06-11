@@ -4,6 +4,7 @@ import interfaces.*;
 import entities.*;
 import java.lang.*;
 import java.util.*;
+import java.util.regex.*;
 
 @PublicCallable
 public class UserHandler implements CRUDLS<UnixPasswd>, Handler
@@ -133,7 +134,7 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	{
 		try
 		{
-			rename(oldObject.pw_name, renameObject.pw_name);
+			rename(oldObject.pw_name, renamedObject.pw_name);
 			return this;
 		}
 		catch(Exception ex)
@@ -188,7 +189,6 @@ public class UserHandler implements CRUDLS<UnixPasswd>, Handler
 	{
 		try
 		{
-			throw new Exception("Not implemented!");
 			List<UnixPasswd> entryList = new ArrayList<UnixPasswd>();;
 			for(UnixPasswd entry: list())
 			{
