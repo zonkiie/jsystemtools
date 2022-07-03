@@ -15,4 +15,8 @@ public class GroupHandler implements CRUDLS<UnixGroup>, Handler
 		return "Handles Group Management";
 	}
 	
+	public CRUDLS<UnixGroup> add(UnixGroup o)
+	{
+		
+	}
 }
