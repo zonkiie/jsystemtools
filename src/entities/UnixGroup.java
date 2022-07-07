@@ -1,5 +1,6 @@
 package entities;
 import java.lang.*;
+import java.util.*;
 import org.apache.commons.lang3.builder.*;
 
 public class UnixGroup
