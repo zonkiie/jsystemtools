@@ -54,6 +54,11 @@ public class GroupHandler implements CRUDLS<UnixGroup>, Handler
 		try
 		{
 			List<String> Params = new ArrayList<String>(){{add("groupmod");}};
+			if(o.gr_passwd != null)
+			{
+				Params.add("-p");
+				Params.add(o.gr_passwd);
+			}
 			if(o.gr_gid != null)
 			{
 				Params.add("-g");
