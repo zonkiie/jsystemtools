@@ -51,8 +51,25 @@ public class GroupHandler implements CRUDLS<UnixGroup>, Handler
 	
 	public CRUDLS<UnixGroup> set(UnixGroup o)
 	{
-		// TODO: Implement
-		return this;
+		try
+		{
+			List<String> Params = new ArrayList<String>(){{add("groupmod");}};
+			if(o.gr_gid != null)
+			{
+				Params.add("-g");
+				Params.add(o.gr_gid.toString());
+			}
+			Params.add(o.gr_name);
+			String[] arrayParams = Params.toArray(new String[Params.size()]);
+			ExecutorReturn executorReturn = SimpleExecutor.execute(arrayParams);
+			if(executorReturn.returnCode != 0) throw new Exception(executorReturn.toString());
+			return this;
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
 	}
 	
 	public CRUDLS<UnixGroup> set(List<UnixGroup> o)
@@ -89,9 +106,6 @@ public class GroupHandler implements CRUDLS<UnixGroup>, Handler
 			return null;
 		}
 	}
-	
-	
-	
 	
 	@PublicCallable
 	public UnixGroup get(String id)
