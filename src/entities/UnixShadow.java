@@ -13,6 +13,7 @@ public class UnixShadow
 	public Long		sp_inact = null;		/* # of days after password expires until account is disabled */
 	public Long		sp_expire = null;		/* Date when account expires (measured in days since 1970-01-01 00:00:00 +0000 (UTC)) */
 	public Long		sp_flag = null;			/* Reserved */
+	public String	newPassword = null;
 	
 	public String toString()
 	{
