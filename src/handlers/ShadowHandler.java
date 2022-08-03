@@ -15,4 +15,11 @@ public class ShadowHandler implements CRUDLS<UnixShadow>, Handler
 		return "Handles Password Management";
 	}
 	
+	public CRUDLS<UnixShadow> add(UnixShadow o)
+	{
+		return this;
+	}
+	
+	
+	
 }
