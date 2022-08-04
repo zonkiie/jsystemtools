@@ -6,3 +6,4 @@ https://www.baeldung.com/java-find-all-classes-in-package
 https://stackoverflow.com/questions/16981232/is-there-an-equivalent-method-to-cs-scanf-in-java
 https://stackoverflow.com/questions/15588903/get-group-names-in-java-regex
 https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
+https://howtodoinjava.com/java/java-security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
