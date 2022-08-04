@@ -40,14 +40,14 @@ public class ShadowHandler implements CRUDLS<UnixShadow>, Handler
 			if(o.sp_expire != null)
 			{
 				Params.add("-e");
-				Params.add(o.sp_expire);
+				Params.add(o.sp_expire.toString());
 			}
 			if(o.sp_inact != null)
 			{
 				Params.add("-i");
-				Params.add(o.sp_inact);
+				Params.add(o.sp_inact.toString());
 			}
-			Params.add(o.pw_name);
+			Params.add(o.sp_namp);
 			String[] arrayParams = Params.toArray(new String[Params.size()]);
 			ExecutorReturn executorReturn = SimpleExecutor.execute(arrayParams);
 			if(executorReturn.returnCode != 0) throw new Exception(executorReturn.toString());
@@ -82,7 +82,7 @@ public class ShadowHandler implements CRUDLS<UnixShadow>, Handler
 	{
 		try
 		{
-			rename(oldObject.pw_name, renamedObject.pw_name);
+			rename(oldObject.sp_namp, renamedObject.sp_namp);
 			return this;
 		}
 		catch(Exception ex)
@@ -99,7 +99,7 @@ public class ShadowHandler implements CRUDLS<UnixShadow>, Handler
 		{
 			ExecutorReturn executorReturn = SimpleExecutor.execute("getent", "shadow", id);
 			if(executorReturn.returnCode != 0) throw new Exception("Something failed! Return code:" + executorReturn.returnCode);
-			UnixPasswd entry = parseLine(executorReturn.toString());
+			UnixShadow entry = parseLine(executorReturn.toString());
 			return entry;
 		}
 		catch(Exception ex)
@@ -111,7 +111,7 @@ public class ShadowHandler implements CRUDLS<UnixShadow>, Handler
 	
 	public UnixShadow get(UnixShadow o)
 	{
-		return get(o.pw_name);
+		return get(o.sp_namp);
 	}
 	
 	@PublicCallable
@@ -173,13 +173,13 @@ public class ShadowHandler implements CRUDLS<UnixShadow>, Handler
 		if(els.length != 9) return null; //Something failed. 9 Entries are nesessary.
 		entry.sp_namp = els[0];
 		entry.sp_pwdp = els[1];
-		entry.sp_lstchg = Integer.valueOf(els[2]);
-		entry.sp_min = Integer.valueOf(els[3]);
-		entry.sp_max = Integer.valueOf(els[4]);
-		entry.sp_warn = Integer.valueOf(els[5]);
-		entry.sp_inact = Integer.valueOf(els[6]);
-		entry.sp_expire = Integer.valueOf(els[7]);
-		entry.sp_flag = Integer.valueOf(els[8]);
+		entry.sp_lstchg = Long.valueOf(els[2]);
+		entry.sp_min = Long.valueOf(els[3]);
+		entry.sp_max = Long.valueOf(els[4]);
+		entry.sp_warn = Long.valueOf(els[5]);
+		entry.sp_inact = Long.valueOf(els[6]);
+		entry.sp_expire = Long.valueOf(els[7]);
+		entry.sp_flag = Long.valueOf(els[8]);
 		return entry;
 	}
 	
