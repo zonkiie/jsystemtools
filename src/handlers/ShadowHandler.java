@@ -120,6 +120,9 @@ public class ShadowHandler implements CRUDLS<UnixShadow>, Handler
 		try
 		{
 			List<UnixShadow> entryList = new ArrayList<UnixShadow>();
+			ExecutorReturn executorReturn = SimpleExecutor.execute("getent", "shadow");
+			if(executorReturn.returnCode != 0) throw new Exception("Something failed! Return code:" + executorReturn.returnCode);
+			for(String line: executorReturn.toString().split("\\R")) entryList.add(parseLine(line));
 			return entryList;
 		}
 		catch(Exception ex)
