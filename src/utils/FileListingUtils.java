@@ -35,8 +35,7 @@ public class FileListingUtils
 	public static List<File> scanArchive(File path, String pattern, Boolean recursive) throws IOException
 	{
 		List<File> fileList = new ArrayList<File>();
-		JarFile jarFile = new JarFile(path);
-		Enumeration<JarEntry> e = jarFile.entries();
+		Enumeration<JarEntry> e = (new JarFile(path)).entries();
 		while (e.hasMoreElements()) {
 			JarEntry jarEntry = e.nextElement();
 			if (jarEntry.getName().matches(pattern) && !jarEntry.isDirectory()) {
@@ -49,8 +48,7 @@ public class FileListingUtils
 	public static List<File> scanArchive(File path, Boolean recursive) throws IOException
 	{
 		List<File> fileList = new ArrayList<File>();
-		JarFile jarFile = new JarFile(path);
-		Enumeration<JarEntry> e = jarFile.entries();
+		Enumeration<JarEntry> e = (new JarFile(path)).entries();
 		while (e.hasMoreElements()) {
 			JarEntry jarEntry = e.nextElement();
 			if (!jarEntry.isDirectory()) {
